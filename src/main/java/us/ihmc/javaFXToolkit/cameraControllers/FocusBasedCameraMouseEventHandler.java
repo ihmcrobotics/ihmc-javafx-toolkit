@@ -22,6 +22,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Sphere;
 import javafx.scene.transform.Affine;
+import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import us.ihmc.commons.Epsilons;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -58,9 +59,12 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
    private final EventHandler<MouseEvent> rotationEventHandler;
    private final EventHandler<KeyEvent> translationEventHandler;
 
+   private final PerspectiveCamera camera;
+
    public FocusBasedCameraMouseEventHandler(ReadOnlyDoubleProperty sceneWidthProperty, ReadOnlyDoubleProperty sceneHeightProperty, PerspectiveCamera camera,
                                             Vector3D up, Vector3D forward)
    {
+      this.camera = camera;
       Vector3D left = new Vector3D();
       left.cross(up, forward);
       if (!MathTools.epsilonEquals(left.length(), 1.0, Epsilons.ONE_HUNDRED_THOUSANDTH))
@@ -171,6 +175,12 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
    public Sphere getFocusPointViz()
    {
       return focusPointViz;
+   }
+
+   public void prependTransform(Transform transform)
+   {
+      camera.getTransforms().add(0, transform);
+      focusPointViz.getTransforms().add(0, transform);
    }
 
    public Translate getTranslate()
