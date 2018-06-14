@@ -14,7 +14,9 @@ import us.ihmc.graphicsDescription.MeshDataHolder;
 import us.ihmc.graphicsDescription.TexCoord2f;
 import us.ihmc.javaFXToolkit.JavaFXTools;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashSet;
@@ -121,7 +123,11 @@ public class JAssImpJavaFXTools
                   String textureLocation = meshFileName.substring(0, meshFileName.lastIndexOf("/")) + "/" + textureFile;
                   URI normalize = new URI(textureLocation).normalize();
 
-                  diffuseMap = new Image(JAssImpJavaFXTools.class.getClassLoader().getResourceAsStream(normalize.toString()));
+                  InputStream textureAsStream = JAssImpJavaFXTools.class.getClassLoader().getResourceAsStream(normalize.toString());
+                  if (textureAsStream == null)
+                     throw new FileNotFoundException("Could not find the resource: " + normalize);
+
+                  diffuseMap = new Image(textureAsStream);
                   uvIndexToUse = j;
                }
 
