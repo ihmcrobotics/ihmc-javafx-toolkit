@@ -19,12 +19,9 @@ public class JavaFXGraphics3DNode extends Group
 
    public JavaFXGraphics3DNode(Graphics3DNode graphicsNode)
    {
-      this.graphicsNode = graphicsNode;
-
-      javaFXGraphicsObject = new JavaFXGraphicsObject(graphicsNode.getGraphics3DObject());
-      this.getChildren().add(javaFXGraphicsObject.getGroup());
+      this(graphicsNode, null);
    }
-   
+
    public JavaFXGraphics3DNode(Graphics3DNode graphicsNode, AppearanceDefinition appearance)
    {
       this.graphicsNode = graphicsNode;
@@ -42,8 +39,8 @@ public class JavaFXGraphics3DNode extends Group
       AffineTransform euclidAffineTransform = graphicsNode.getTransform();
       JavaFXTools.convertEuclidAffineToJavaFXAffine(euclidAffineTransform, javaFxAffineTransform);
       transforms.add(javaFxAffineTransform);
-      
-      for(int i = 0; i < updatables.size(); i++)
+
+      for (int i = 0; i < updatables.size(); i++)
       {
          updatables.get(i).update();
       }
