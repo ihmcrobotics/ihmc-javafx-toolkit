@@ -7,6 +7,7 @@ import javafx.scene.Group;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import us.ihmc.euclid.transform.AffineTransform;
+import us.ihmc.graphicsDescription.appearance.AppearanceDefinition;
 import us.ihmc.graphicsDescription.structure.Graphics3DNode;
 import us.ihmc.javaFXToolkit.JavaFXTools;
 
@@ -18,9 +19,14 @@ public class JavaFXGraphics3DNode extends Group
 
    public JavaFXGraphics3DNode(Graphics3DNode graphicsNode)
    {
+      this(graphicsNode, null);
+   }
+
+   public JavaFXGraphics3DNode(Graphics3DNode graphicsNode, AppearanceDefinition appearance)
+   {
       this.graphicsNode = graphicsNode;
 
-      javaFXGraphicsObject = new JavaFXGraphicsObject(graphicsNode.getGraphics3DObject());
+      javaFXGraphicsObject = new JavaFXGraphicsObject(graphicsNode.getGraphics3DObject(), appearance);
       this.getChildren().add(javaFXGraphicsObject.getGroup());
    }
 
@@ -33,8 +39,8 @@ public class JavaFXGraphics3DNode extends Group
       AffineTransform euclidAffineTransform = graphicsNode.getTransform();
       JavaFXTools.convertEuclidAffineToJavaFXAffine(euclidAffineTransform, javaFxAffineTransform);
       transforms.add(javaFxAffineTransform);
-      
-      for(int i = 0; i < updatables.size(); i++)
+
+      for (int i = 0; i < updatables.size(); i++)
       {
          updatables.get(i).update();
       }
