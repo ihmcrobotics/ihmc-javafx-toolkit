@@ -21,7 +21,6 @@ import us.ihmc.graphicsDescription.MeshDataGenerator;
 import us.ihmc.graphicsDescription.MeshDataHolder;
 import us.ihmc.graphicsDescription.appearance.AppearanceDefinition;
 import us.ihmc.graphicsDescription.appearance.YoAppearanceRGBColor;
-import us.ihmc.graphicsDescription.color.MutableColor;
 import us.ihmc.graphicsDescription.instructions.ArcTorusGraphics3DInstruction;
 import us.ihmc.graphicsDescription.instructions.CapsuleGraphics3DInstruction;
 import us.ihmc.graphicsDescription.instructions.ConeGraphics3DInstruction;
@@ -71,7 +70,7 @@ public class JavaFXGraphicsObject extends Graphics3DInstructionExecutor
                if (instruction instanceof Graphics3DInstruction)
                {
                   Graphics3DInstruction graphicsInstruction = (Graphics3DInstruction) instruction;
-                  if(appearance != null)
+                  if (appearance != null)
                      graphicsInstruction.setAppearance(appearance);
                }
             }
@@ -125,7 +124,6 @@ public class JavaFXGraphicsObject extends Graphics3DInstructionExecutor
          Material outputMaterial = convertMaterial(graphics3DAddModelFile.getAppearance());
          for (int i = 0; i < outputModelMeshes.length; i++)
          {
-            MutableColor color = graphics3DAddModelFile.getAppearance().getColor();
             outputModelMeshes[i].setMaterial(outputMaterial);
          }
       }
