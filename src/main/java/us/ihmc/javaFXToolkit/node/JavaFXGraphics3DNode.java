@@ -7,6 +7,7 @@ import javafx.scene.Group;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import us.ihmc.euclid.transform.AffineTransform;
+import us.ihmc.graphicsDescription.appearance.AppearanceDefinition;
 import us.ihmc.graphicsDescription.structure.Graphics3DNode;
 import us.ihmc.javaFXToolkit.JavaFXTools;
 
@@ -21,6 +22,14 @@ public class JavaFXGraphics3DNode extends Group
       this.graphicsNode = graphicsNode;
 
       javaFXGraphicsObject = new JavaFXGraphicsObject(graphicsNode.getGraphics3DObject());
+      this.getChildren().add(javaFXGraphicsObject.getGroup());
+   }
+   
+   public JavaFXGraphics3DNode(Graphics3DNode graphicsNode, AppearanceDefinition appearance)
+   {
+      this.graphicsNode = graphicsNode;
+
+      javaFXGraphicsObject = new JavaFXGraphicsObject(graphicsNode.getGraphics3DObject(), appearance);
       this.getChildren().add(javaFXGraphicsObject.getGroup());
    }
 
