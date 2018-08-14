@@ -26,7 +26,7 @@ public class JavaFXGraphicsTest
 
    private static final AppearanceDefinition desiredAppearance = YoAppearance.Red();
 
-   @ContinuousIntegrationTest(estimatedDuration = 0.0)
+   @ContinuousIntegrationTest(estimatedDuration = 1.0)
    @Test(timeout = 30000)
    public void testJavaFXGraphicsObject()
    {
