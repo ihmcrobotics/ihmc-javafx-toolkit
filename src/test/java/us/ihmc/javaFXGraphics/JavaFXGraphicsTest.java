@@ -6,9 +6,6 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import us.ihmc.continuousIntegration.ContinuousIntegrationAnnotations.ContinuousIntegrationPlan;
-import us.ihmc.continuousIntegration.ContinuousIntegrationAnnotations.ContinuousIntegrationTest;
-import us.ihmc.continuousIntegration.IntegrationCategory;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.graphicsDescription.Graphics3DObject;
 import us.ihmc.graphicsDescription.appearance.AppearanceDefinition;
@@ -18,7 +15,6 @@ import us.ihmc.graphicsDescription.instructions.Graphics3DInstruction;
 import us.ihmc.graphicsDescription.instructions.Graphics3DPrimitiveInstruction;
 import us.ihmc.javaFXToolkit.node.JavaFXGraphicsObject;
 
-@ContinuousIntegrationPlan(categories = {IntegrationCategory.FAST})
 public class JavaFXGraphicsTest
 {
    private static final double CUBE_SIDE = 2.0;
@@ -26,7 +22,6 @@ public class JavaFXGraphicsTest
 
    private static final AppearanceDefinition desiredAppearance = YoAppearance.Red();
 
-   @ContinuousIntegrationTest(estimatedDuration = 1.0)
    @Test(timeout = 30000)
    public void testJavaFXGraphicsObject()
    {
