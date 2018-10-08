@@ -7,8 +7,10 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javafx.animation.AnimationTimer;
-import us.ihmc.javaFXToolkit.messager.MessagerAPIFactory.MessagerAPI;
-import us.ihmc.javaFXToolkit.messager.MessagerAPIFactory.Topic;
+import us.ihmc.messager.SharedMemoryMessager;
+import us.ihmc.messager.TopicListener;
+import us.ihmc.messager.MessagerAPIFactory.MessagerAPI;
+import us.ihmc.messager.MessagerAPIFactory.Topic;
 
 /**
  * Implementation of {@code JavaFXMessager} using shared memory.
