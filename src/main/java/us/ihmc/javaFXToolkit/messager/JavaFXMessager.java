@@ -4,7 +4,9 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import us.ihmc.javaFXToolkit.messager.MessageBidirectionalBinding.PropertyToMessageTypeConverter;
-import us.ihmc.javaFXToolkit.messager.MessagerAPIFactory.Topic;
+import us.ihmc.messager.Messager;
+import us.ihmc.messager.TopicListener;
+import us.ihmc.messager.MessagerAPIFactory.Topic;
 
 /**
  * This extends a {@code Messager} to include convenience methods for binding {@link Property}s.
