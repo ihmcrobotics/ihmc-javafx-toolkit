@@ -10,7 +10,6 @@ import gnu.trove.list.array.TIntArrayList;
 import javafx.scene.shape.MeshView;
 import javafx.scene.shape.TriangleMesh;
 import javafx.scene.shape.VertexFormat;
-import us.ihmc.commons.PrintTools;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple3D.Point3D32;
 import us.ihmc.euclid.tuple3D.Vector3D32;
@@ -19,6 +18,7 @@ import us.ihmc.graphicsDescription.MeshDataBuilder;
 import us.ihmc.graphicsDescription.MeshDataGenerator;
 import us.ihmc.graphicsDescription.MeshDataHolder;
 import us.ihmc.graphicsDescription.TexCoord2f;
+import us.ihmc.log.LogTools;
 
 /**
  * This class an automated interpretation of {@link MeshDataHolder} into JavaFX {@link TriangleMesh} usable via {@link MeshView}.
@@ -130,7 +130,7 @@ public class JavaFXMeshDataInterpreter
       {
          if(tuple == null)
          {
-            PrintTools.error("Got Null, Something is funny here");
+            LogTools.error("Got Null, Something is funny here");
             array[index++] = Float.NaN;
             array[index++] = Float.NaN;
             array[index++] = Float.NaN;
@@ -153,7 +153,7 @@ public class JavaFXMeshDataInterpreter
       {
          if(tuple == null)
          {
-            PrintTools.error("Got Null, Something is funny here");
+            LogTools.error("Got Null, Something is funny here");
             array[index++] = Float.NaN;
             array[index++] = Float.NaN;
          }

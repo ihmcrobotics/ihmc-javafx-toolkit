@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.beans.property.Property;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import us.ihmc.messager.TopicListener;
 
 /**
  * This class allows to create a bidirectional binding between a JavaFX {@link Property} to a
@@ -62,8 +63,10 @@ public class MessageBidirectionalBinding<M, P> implements TopicListener<M>, Chan
    public void receivedMessageForTopic(M messageContent)
    {
       P interpretedContent = converter.interpret(messageContent);
-      changedOnMessageReception.set(!boundProperty.getValue().equals(interpretedContent));
-      boundProperty.setValue(interpretedContent);
+      boolean updateProperty = !boundProperty.getValue().equals(interpretedContent);
+      changedOnMessageReception.set(updateProperty);
+      if (updateProperty)
+         boundProperty.setValue(interpretedContent);
    }
 
    /**

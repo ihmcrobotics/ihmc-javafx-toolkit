@@ -1,17 +1,11 @@
-buildscript {
-   repositories {
-      maven { url "https://plugins.gradle.org/m2/" }
-      mavenLocal()
-   }
-   dependencies {
-      classpath "us.ihmc:ihmc-build:0.14.0"
-   }
+plugins {
+   id("us.ihmc.ihmc-build") version "0.15.3"
+   id("us.ihmc.ihmc-ci") version "1.1.6"
 }
-apply plugin: "us.ihmc.ihmc-build"
 
 ihmc {
    group = "us.ihmc"
-   version = "0.12.4"
+   version = "0.12.5"
    vcsUrl = "https://github.com/ihmcrobotics/ihmc-javafx-toolkit"
    openSource = true
    
@@ -20,15 +14,18 @@ ihmc {
 }
 
 mainDependencies {
-   compile group: 'us.ihmc', name: 'euclid-core', version: '0.6.0'
-   compile group: 'us.ihmc', name: 'ihmc-yovariables', version: '0.3.5'
-   compile "net.sf.trove4j:trove4j:3.0.3"
-   compile "org.apache.commons:commons-lang3:3.7"
+   compile group: "us.ihmc", name: "euclid-core", version: "0.7.0"
+   compile group: "us.ihmc", name: "ihmc-yovariables", version: "0.3.6"
+   compile group: "net.sf.trove4j", name: "trove4j", version: "3.0.3"
+   compile group: "org.apache.commons", name: "commons-lang3", version: "3.7"
+
    compile("org.fxyz3d:fxyz3d:0.1.1") {
-      exclude group: 'java3d', module: 'vecmath'
+      exclude group: "java3d", module: "vecmath"
    }
-   compile group: "us.ihmc", name: "ihmc-graphics-description", version: "0.12.5"
-   compile group: 'us.ihmc.thirdparty', name: 'jassimp', version: '4.0.0-ihmc2'
+
+   compile group: "us.ihmc", name: "ihmc-messager", version: "0.0.0"
+   compile group: "us.ihmc", name: "ihmc-graphics-description", version: "0.12.7"
+   compile group: "us.ihmc.thirdparty", name: "jassimp", version: "4.0.0-ihmc2"
 }
 
 visualizersDependencies {

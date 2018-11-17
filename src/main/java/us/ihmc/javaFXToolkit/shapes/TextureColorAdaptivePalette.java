@@ -13,7 +13,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
-import us.ihmc.commons.PrintTools;
+import us.ihmc.log.LogTools;
 
 /**
  * Provides an color palette that expands as new colors are being accessed instead of being pre-generated as in {@link TextureColorPalette2D} and {@link TextureColorPalette1D}.
@@ -142,7 +142,7 @@ public class TextureColorAdaptivePalette implements TextureColorPalette
          }
          else
          {
-            PrintTools.error(this, "Reached maximum capacity of the palette. Next colors will be wrong.");
+            LogTools.error("Reached maximum capacity of the palette. Next colors will be wrong.");
             return new float[] {0.0f, 0.0f};
          }
       }
