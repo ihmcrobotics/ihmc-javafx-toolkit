@@ -4,6 +4,7 @@ import static us.ihmc.robotics.Assert.*;
 
 import java.util.ArrayList;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -15,6 +16,7 @@ import us.ihmc.graphicsDescription.instructions.Graphics3DInstruction;
 import us.ihmc.graphicsDescription.instructions.Graphics3DPrimitiveInstruction;
 import us.ihmc.javaFXToolkit.node.JavaFXGraphicsObject;
 
+@Tag("gui")
 public class JavaFXGraphicsTest
 {
    private static final double CUBE_SIDE = 2.0;
