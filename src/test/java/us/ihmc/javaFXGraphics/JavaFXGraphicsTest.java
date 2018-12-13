@@ -1,10 +1,11 @@
 package us.ihmc.javaFXGraphics;
 
-import static org.junit.Assert.assertTrue;
+import static us.ihmc.robotics.Assert.*;
 
 import java.util.ArrayList;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.graphicsDescription.Graphics3DObject;
@@ -15,6 +16,7 @@ import us.ihmc.graphicsDescription.instructions.Graphics3DInstruction;
 import us.ihmc.graphicsDescription.instructions.Graphics3DPrimitiveInstruction;
 import us.ihmc.javaFXToolkit.node.JavaFXGraphicsObject;
 
+@Tag("gui")
 public class JavaFXGraphicsTest
 {
    private static final double CUBE_SIDE = 2.0;
@@ -22,7 +24,7 @@ public class JavaFXGraphicsTest
 
    private static final AppearanceDefinition desiredAppearance = YoAppearance.Red();
 
-   @Test(timeout = 30000)
+   @Test// timeout = 30000
    public void testJavaFXGraphicsObject()
    {
       Graphics3DObject cubeGraphics = new Graphics3DObject();
