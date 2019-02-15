@@ -4,13 +4,7 @@ import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
-import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.PerspectiveCamera;
-import javafx.scene.PointLight;
-import javafx.scene.Scene;
-import javafx.scene.SceneAntialiasing;
-import javafx.scene.SubScene;
+import javafx.scene.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import us.ihmc.euclid.tuple3D.Vector3D;
@@ -101,6 +95,23 @@ public class View3DFactory
    public static View3DFactory createSubscene(boolean depthBuffer, SceneAntialiasing antiAliasing)
    {
       return new View3DFactory(-1, -1, depthBuffer, antiAliasing, SceneType.SUB_SCENE);
+   }
+
+   /**
+    * Adds some nice ambient and point lighting to the scene.
+    */
+   public void addDefaultLighting()
+   {
+      double ambientValue = 0.7;
+      double pointValue = 0.2;
+      double pointDistance = 1000.0;
+      Color ambientColor = Color.color(ambientValue, ambientValue, ambientValue);
+      addNodeToView(new AmbientLight(ambientColor));
+      Color indoorColor = Color.color(pointValue, pointValue, pointValue);
+      addPointLight(pointDistance, pointDistance, pointDistance, indoorColor);
+      addPointLight(-pointDistance, pointDistance, pointDistance, indoorColor);
+      addPointLight(-pointDistance, -pointDistance, pointDistance, indoorColor);
+      addPointLight(pointDistance, -pointDistance, pointDistance, indoorColor);
    }
 
    /**
