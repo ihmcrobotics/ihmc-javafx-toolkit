@@ -113,4 +113,29 @@ public interface JavaFXMessager extends Messager
     * @param listener the listener to be registered.
     */
    <T> void registerJavaFXSyncedTopicListener(Topic<T> topic, TopicListener<T> listener);
+
+   /**
+    * Creates a variable which is to be automatically updated when this messager receives data
+    * destined to the given topic.
+    *
+    * @param topic the topic to listen to.
+    * @param initialValue the initial value of the newly created variable.
+    * @return a variable that is updated automatically when receiving new data, with change info
+    */
+   default <T> ChangingReference<T> createChangingInput(Topic<T> topic, T initialValue)
+   {
+      return new ChangingReference<>(createInput(topic, initialValue));
+   }
+
+   /**
+    * Creates a variable which is to be automatically updated when this messager receives data
+    * destined to the given topic.
+    *
+    * @param topic the topic to listen to.
+    * @return a variable that is updated automatically when receiving new data, with change info
+    */
+   default <T> ChangingReference<T> createChangingInput(Topic<T> topic)
+   {
+      return new ChangingReference<>(createInput(topic, null));
+   }
 }
