@@ -1,11 +1,10 @@
 package us.ihmc.javaFXGraphics;
 
-import static us.ihmc.robotics.Assert.*;
-
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.graphicsDescription.Graphics3DObject;
@@ -24,7 +23,7 @@ public class JavaFXGraphicsTest
 
    private static final AppearanceDefinition desiredAppearance = YoAppearance.Red();
 
-   @Test// timeout = 30000
+   @Test
    public void testJavaFXGraphicsObject()
    {
       Graphics3DObject cubeGraphics = new Graphics3DObject();
