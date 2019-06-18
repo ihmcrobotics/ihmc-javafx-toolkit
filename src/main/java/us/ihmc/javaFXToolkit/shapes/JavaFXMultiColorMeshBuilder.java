@@ -467,8 +467,20 @@ public class JavaFXMultiColorMeshBuilder
     * No sanity check is performed on the polygon's vertices.
     * @param polygon the polygon 3D vertices.
     * @param color color of the polygon. Color accuracy depends on the color palette in use.
+    * @deprecated Use {@link #addPolygon(List<Point3D>,Color)} instead
     */
    public void addPolyon(List<Point3D> polygon, Color color)
+   {
+      addPolygon(polygon, color);
+   }
+
+   /**
+    * Add a polygon to this builder.
+    * No sanity check is performed on the polygon's vertices.
+    * @param polygon the polygon 3D vertices.
+    * @param color color of the polygon. Color accuracy depends on the color palette in use.
+    */
+   public void addPolygon(List<Point3D> polygon, Color color)
    {
       addMesh(MeshDataGenerator.Polygon(polygon), color);
    }
