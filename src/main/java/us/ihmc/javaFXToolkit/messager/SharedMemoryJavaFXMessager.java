@@ -22,6 +22,7 @@ public class SharedMemoryJavaFXMessager extends SharedMemoryMessager implements 
 {
    private final Map<Topic<?>, JavaFXSyncedTopicListeners> javaFXSyncedTopicListeners = new HashMap<>();
    private final AnimationTimer animationTimer;
+   private boolean readingListeners = false;
 
    /**
     * Creates a new messager.
@@ -38,12 +39,17 @@ public class SharedMemoryJavaFXMessager extends SharedMemoryMessager implements 
          {
             try
             {
+               readingListeners = true;
                for (JavaFXSyncedTopicListeners listener : javaFXSyncedTopicListeners.values())
                   listener.notifyListeners();
             }
             catch (Exception e)
             {
                e.printStackTrace();
+            }
+            finally
+            {
+               readingListeners = false;
             }
          }
       };
@@ -61,14 +67,17 @@ public class SharedMemoryJavaFXMessager extends SharedMemoryMessager implements 
 
          try
          {
-            if (Platform.isFxApplicationThread())
+            if (!readingListeners && Platform.isFxApplicationThread())
+            { // It appears to not be enough to check for application thread somehow.
                javaFXSyncedTopicListeners.put(topic, newTopicListeners);
+            }
             else // The following one can throw an exception if the JavaFX thread has not started yet.
+            {
                Platform.runLater(() -> javaFXSyncedTopicListeners.put(topic, newTopicListeners));
+            }
          }
          catch (IllegalStateException e)
-         {
-            // The JavaFX thread has not started yet, no need to invoke Platform.runLater(...).
+         { // The JavaFX thread has not started yet, no need to invoke Platform.runLater(...).
             javaFXSyncedTopicListeners.put(topic, newTopicListeners);
          }
       }
