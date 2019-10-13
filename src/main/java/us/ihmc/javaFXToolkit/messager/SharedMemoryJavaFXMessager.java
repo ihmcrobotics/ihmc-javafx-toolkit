@@ -7,10 +7,11 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javafx.animation.AnimationTimer;
-import us.ihmc.messager.SharedMemoryMessager;
-import us.ihmc.messager.TopicListener;
+import javafx.application.Platform;
 import us.ihmc.messager.MessagerAPIFactory.MessagerAPI;
 import us.ihmc.messager.MessagerAPIFactory.Topic;
+import us.ihmc.messager.SharedMemoryMessager;
+import us.ihmc.messager.TopicListener;
 
 /**
  * Implementation of {@code JavaFXMessager} using shared memory.
@@ -55,8 +56,21 @@ public class SharedMemoryJavaFXMessager extends SharedMemoryMessager implements 
       JavaFXSyncedTopicListeners topicListeners = javaFXSyncedTopicListeners.get(topic);
       if (topicListeners == null)
       {
-         topicListeners = new JavaFXSyncedTopicListeners(topic);
-         javaFXSyncedTopicListeners.put(topic, topicListeners);
+         JavaFXSyncedTopicListeners newTopicListeners = new JavaFXSyncedTopicListeners(topic);
+         topicListeners = newTopicListeners;
+
+         try
+         {
+            if (Platform.isFxApplicationThread())
+               javaFXSyncedTopicListeners.put(topic, newTopicListeners);
+            else // The following one can throw an exception if the JavaFX thread has not started yet.
+               Platform.runLater(() -> javaFXSyncedTopicListeners.put(topic, newTopicListeners));
+         }
+         catch (IllegalStateException e)
+         {
+            // The JavaFX thread has not started yet, no need to invoke Platform.runLater(...).
+            javaFXSyncedTopicListeners.put(topic, newTopicListeners);
+         }
       }
       topicListeners.addListener(listener);
    }
