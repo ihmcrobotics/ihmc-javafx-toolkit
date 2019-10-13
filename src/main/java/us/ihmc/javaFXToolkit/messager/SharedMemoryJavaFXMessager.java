@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
@@ -103,12 +103,12 @@ public class SharedMemoryJavaFXMessager extends SharedMemoryMessager implements 
    @SuppressWarnings("unchecked")
    private class JavaFXSyncedTopicListeners
    {
-      private final AtomicReference<Object> input;
+      private final ConcurrentLinkedQueue<Object> inputQueue = new ConcurrentLinkedQueue<>();
       private final List<TopicListener<Object>> listeners = new ArrayList<>();
 
       private JavaFXSyncedTopicListeners(Topic<?> topic)
       {
-         input = (AtomicReference<Object>) createInput(topic);
+         registerTopicListener(topic, message -> inputQueue.add(message));
       }
 
       private void addListener(TopicListener<?> listener)
@@ -118,9 +118,11 @@ public class SharedMemoryJavaFXMessager extends SharedMemoryMessager implements 
 
       private void notifyListeners()
       {
-         Object newData = input.getAndSet(null);
-         if (newData != null)
+         while (!inputQueue.isEmpty())
+         {
+            Object newData = inputQueue.poll();
             listeners.forEach(listener -> listener.receivedMessageForTopic(newData));
+         }
       }
    }
 }
