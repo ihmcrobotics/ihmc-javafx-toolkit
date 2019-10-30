@@ -25,7 +25,7 @@ mainDependencies {
    }
 
    api("us.ihmc:ihmc-messager:0.1.2")
-   api("us.ihmc:ihmc-graphics-description:0.12.12")
+   api("us.ihmc:ihmc-graphics-description:0.12.13")
    api("us.ihmc:jassimp:4.0.0-ihmc3")
 }
 
