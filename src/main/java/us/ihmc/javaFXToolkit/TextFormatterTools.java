@@ -5,9 +5,12 @@ import java.util.function.UnaryOperator;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextFormatter.Change;
+import javafx.util.converter.DefaultStringConverter;
 
 /**
- * This class provides simple tools for setting up JavaFX UI control text formatter such as {@link TextField#setTextFormatter(TextFormatter)}. 
+ * This class provides simple tools for setting up JavaFX UI control text formatter such as
+ * {@link TextField#setTextFormatter(TextFormatter)}.
+ * 
  * @author Sylvain Bertrand
  */
 public class TextFormatterTools
@@ -17,10 +20,15 @@ public class TextFormatterTools
    /**
     * @return a TextFormatter that ensures proper formatting of an IP address.
     */
-   public static TextFormatter<Change> ipAddressTextFormatter()
+   public static TextFormatter<String> ipAddressTextFormatter()
+   {
+      return ipAddressTextFormatter(null);
+   }
+
+   public static TextFormatter<String> ipAddressTextFormatter(String defaultValue)
    {
       UnaryOperator<Change> ipAddressFilter = change -> change.getControlNewText().matches(ipAddressRegex) ? change : null;
-      return new TextFormatter<>(ipAddressFilter);
+      return new TextFormatter<>(new DefaultStringConverter(), defaultValue, ipAddressFilter);
    }
 
    private static String makePartialIPRegex()
@@ -32,9 +40,10 @@ public class TextFormatterTools
    }
 
    /**
-    * @return a TextFormatter that ensures the amount of characters in a text is less or equal the specified amount.
+    * @return a TextFormatter that ensures the amount of characters in a text is less or equal the
+    *         specified amount.
     */
-   public static TextFormatter<Change> maxLengthTextFormatter(int maxCharacters)
+   public static TextFormatter<String> maxLengthTextFormatter(int maxCharacters)
    {
       UnaryOperator<Change> lengthFilter = change -> change.getControlNewText().length() <= maxCharacters ? change : null;
       return new TextFormatter<>(lengthFilter);

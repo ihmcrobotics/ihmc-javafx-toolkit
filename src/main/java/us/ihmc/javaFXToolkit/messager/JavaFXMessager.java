@@ -5,8 +5,8 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import us.ihmc.javaFXToolkit.messager.MessageBidirectionalBinding.PropertyToMessageTypeConverter;
 import us.ihmc.messager.Messager;
-import us.ihmc.messager.TopicListener;
 import us.ihmc.messager.MessagerAPIFactory.Topic;
+import us.ihmc.messager.TopicListener;
 
 /**
  * This extends a {@code Messager} to include convenience methods for binding {@link Property}s.
@@ -16,8 +16,8 @@ import us.ihmc.messager.MessagerAPIFactory.Topic;
 public interface JavaFXMessager extends Messager
 {
    /**
-    * Creates a property which is to be automatically updated when this messager receives data
-    * destined to the given topic.
+    * Creates a property which is to be automatically updated when this messager receives data destined
+    * to the given topic.
     * 
     * @param topic the topic to listen to.
     * @return a property that is updated automatically when receiving new data.
@@ -28,10 +28,10 @@ public interface JavaFXMessager extends Messager
    }
 
    /**
-    * Creates a property which is to be automatically updated when this messager receives data
-    * destined to the given topic.
+    * Creates a property which is to be automatically updated when this messager receives data destined
+    * to the given topic.
     * 
-    * @param topic the topic to listen to.
+    * @param topic        the topic to listen to.
     * @param initialValue the initial value of the newly created property.
     * @return a property that is updated automatically when receiving new data.
     */
@@ -45,7 +45,7 @@ public interface JavaFXMessager extends Messager
    /**
     * Binds a topic to a property such that a message is sent whenever the observable-value changes.
     * 
-    * @param topicToBind the topic to bind to the observable value.
+    * @param topicToBind     the topic to bind to the observable value.
     * @param observableValue the value which is to trigger sending message.
     */
    default <T> void bindTopic(Topic<T> topicToBind, ObservableValue<T> observableValue)
@@ -54,10 +54,10 @@ public interface JavaFXMessager extends Messager
    }
 
    /**
-    * Binds an existing property to a topic, such that when this messager receives data for the
-    * topic, it will update the property.
+    * Binds an existing property to a topic, such that when this messager receives data for the topic,
+    * it will update the property.
     * 
-    * @param topic the topic which is to trigger updating the property.
+    * @param topic          the topic which is to trigger updating the property.
     * @param propertyToBind the property to bind to the given topic.
     */
    default <T> void bindPropertyToTopic(Topic<T> topic, Property<T> propertyToBind)
@@ -68,10 +68,10 @@ public interface JavaFXMessager extends Messager
    /**
     * Creates a bidirectional binding between the given topic and property, i.e. they are synced.
     * 
-    * @param topic the topic to bind.
-    * @param property the property to bind.
+    * @param topic     the topic to bind.
+    * @param property  the property to bind.
     * @param pushValue whether the current property value should be should be submitted to the
-    *           messager.
+    *                  messager.
     */
    default <T> void bindBidirectional(Topic<T> topic, Property<T> property, boolean pushValue)
    {
@@ -86,11 +86,11 @@ public interface JavaFXMessager extends Messager
    /**
     * Creates a bidirectional binding between the given topic and property, i.e. they are synced.
     * 
-    * @param topic the topic to bind.
-    * @param property the property to bind.
+    * @param topic     the topic to bind.
+    * @param property  the property to bind.
     * @param converter protocol to convert between the topic data type and the property data type.
     * @param pushValue whether the current property value should be should be submitted to the
-    *           messager.
+    *                  messager.
     */
    default <M, P> void bindBidirectional(Topic<M> topic, Property<P> property, PropertyToMessageTypeConverter<M, P> converter, boolean pushValue)
    {
@@ -102,15 +102,25 @@ public interface JavaFXMessager extends Messager
    }
 
    /**
-    * Same as {@link #registerTopicListener(Topic, TopicListener)} but the listener only get
-    * notified on the next rendering thread tick.
+    * Same as {@link #registerTopicListener(Topic, TopicListener)} but the listener only get notified
+    * on the next rendering thread tick.
     * <p>
-    * This implementation is to be used whenever the listener is to update some UI controls or
-    * scene.
+    * This implementation is to be used whenever the listener is to update some UI controls or scene.
     * </p>
     * 
-    * @param topic the topic to listen to.
+    * @param topic    the topic to listen to.
     * @param listener the listener to be registered.
     */
    <T> void registerJavaFXSyncedTopicListener(Topic<T> topic, TopicListener<T> listener);
+
+   /**
+    * Removes a listener that was previously registered to this messager via
+    * {@link #registerJavaFXSyncedTopicListener(Topic, TopicListener)}.
+    * 
+    * @param topic    the topic the listener is listening to.
+    * @param listener the listener to be removed.
+    * @return {@code true} if the internal list of inputs was modified by this operation, {@code false}
+    *         otherwise.
+    */
+   <T> boolean removeJavaFXSyncedTopicListener(Topic<T> topic, TopicListener<T> listener);
 }
