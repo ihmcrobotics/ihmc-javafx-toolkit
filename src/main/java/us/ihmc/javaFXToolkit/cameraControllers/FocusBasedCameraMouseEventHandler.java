@@ -147,7 +147,19 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
 
    public void enableShiftClickFocusTranslation()
    {
-      setupRayBasedFocusTranslation(event -> event.isShiftDown());
+      setupRayBasedFocusTranslation(event ->
+      {
+         if (!event.isShiftDown())
+            return false;
+         if (event.getButton() != MouseButton.PRIMARY)
+            return false;
+         if (!event.isStillSincePress())
+            return false;
+         if (event.getEventType() != MouseEvent.MOUSE_CLICKED)
+            return false;
+
+         return true;
+      });
    }
 
    public void setupRayBasedFocusTranslation(Predicate<MouseEvent> condition)
@@ -157,10 +169,7 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
          @Override
          public void handle(MouseEvent event)
          {
-            if (event.getButton() != MouseButton.PRIMARY)
-               return;
-
-            if (condition.test(event) && event.isStillSincePress() && event.getEventType() == MouseEvent.MOUSE_CLICKED)
+            if (condition.test(event))
             {
                PickResult pickResult = event.getPickResult();
                Node intersectedNode = pickResult.getIntersectedNode();
