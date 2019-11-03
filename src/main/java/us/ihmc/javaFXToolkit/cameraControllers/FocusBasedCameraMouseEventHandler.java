@@ -25,10 +25,10 @@ import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import us.ihmc.commons.Epsilons;
+import us.ihmc.commons.MathTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.javaFXToolkit.JavaFXTools;
-import us.ihmc.commons.MathTools;
 
 /**
  * This class provides a simple controller for a JavaFX {@link PerspectiveCamera}. The control is
@@ -58,6 +58,7 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
    private final CameraZoomCalculator zoomCalculator = new CameraZoomCalculator();
    private final CameraRotationCalculator rotationCalculator;
    private final CameraTranslationCalculator translationCalculator;
+   private final CameraNodeTracker nodeTracker;
 
    private final EventHandler<ScrollEvent> zoomEventHandler = zoomCalculator.createScrollEventHandler();
    private final EventHandler<MouseEvent> rotationEventHandler;
@@ -90,10 +91,12 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
       translationCalculator.setZoom(zoomCalculator.zoomProperty());
       focusPointTranslation = translationCalculator.getTranslation();
       translationEventHandler = translationCalculator.createKeyEventHandler();
+      nodeTracker = new CameraNodeTracker(focusPointTranslation);
+      Translate nodeTrackingTranslate = nodeTracker.getNodeTrackingTranslate();
 
       changeCameraPosition(-2.0, 0.7, 1.0);
 
-      camera.getTransforms().addAll(focusPointTranslation, cameraOrientation, offsetFromFocusPoint);
+      camera.getTransforms().addAll(nodeTrackingTranslate, focusPointTranslation, cameraOrientation, offsetFromFocusPoint);
 
       Point3D cameraPosition = new Point3D();
       JavaFXTools.applyTranform(camera.getLocalToSceneTransform(), cameraPosition);
@@ -103,7 +106,7 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
       material.setDiffuseColor(Color.DARKRED);
       material.setSpecularColor(Color.RED);
       focusPointViz.setMaterial(material);
-      focusPointViz.getTransforms().add(focusPointTranslation);
+      focusPointViz.getTransforms().addAll(nodeTrackingTranslate, focusPointTranslation);
 
       new AnimationTimer()
       {
@@ -177,6 +180,9 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
                   return;
                javafx.geometry.Point3D localPoint = pickResult.getIntersectedPoint();
                javafx.geometry.Point3D scenePoint = intersectedNode.getLocalToSceneTransform().transform(localPoint);
+
+               nodeTracker.setNodeToTrack(null);
+               nodeTracker.resetTranslate();
                focusPointTranslation.setX(scenePoint.getX());
                focusPointTranslation.setY(scenePoint.getY());
                focusPointTranslation.setZ(scenePoint.getZ());
@@ -730,5 +736,10 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
    public final void setDownKey(final KeyCode downKey)
    {
       downKeyProperty().set(downKey);
+   }
+
+   public CameraNodeTracker getNodeTracker()
+   {
+      return nodeTracker;
    }
 }
