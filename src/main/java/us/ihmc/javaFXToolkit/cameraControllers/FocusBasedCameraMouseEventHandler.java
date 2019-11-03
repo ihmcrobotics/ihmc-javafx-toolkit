@@ -31,14 +31,18 @@ import us.ihmc.javaFXToolkit.JavaFXTools;
 import us.ihmc.commons.MathTools;
 
 /**
- * This class provides a simple controller for a JavaFX {@link PerspectiveCamera}.
- * The control is achieved via event handling by adding this controller as an {@link EventHandler} to the scene or sub-scene the camera is attached to.
+ * This class provides a simple controller for a JavaFX {@link PerspectiveCamera}. The control is
+ * achieved via event handling by adding this controller as an {@link EventHandler} to the scene or
+ * sub-scene the camera is attached to.
  * <p>
  * Behavior of this camera controller:
- * <li> The camera is always pointing toward a focus point.
- * <li> The focus point can be translated via keyboard bindings, or instantly moved with a mouse shortcut only if {@link #setupRayBasedFocusTranslation(Predicate)} or {@link #enableShiftClickFocusTranslation()} has been called.
- * <li> The camera zoom can be changed vi the mouse wheel.
- * <li> Using the mouse, the camera can be rotated around the focus point.
+ * <li>The camera is always pointing toward a focus point.
+ * <li>The focus point can be translated via keyboard bindings, or instantly moved with a mouse
+ * shortcut only if {@link #setupRayBasedFocusTranslation(Predicate)} or
+ * {@link #enableShiftClickFocusTranslation()} has been called.
+ * <li>The camera zoom can be changed vi the mouse wheel.
+ * <li>Using the mouse, the camera can be rotated around the focus point.
+ *
  * @author Sylvain Bertrand
  */
 public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>

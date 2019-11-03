@@ -26,45 +26,53 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.javaFXToolkit.JavaFXTools;
 
 /**
- * This class provides the tools necessary to build a simple controller for computing the orientation of a JavaFX {@link PerspectiveCamera}.
- * This class is ready to be used with an {@link EventHandler} via {@link #createMouseEventHandler(ReadOnlyDoubleProperty, ReadOnlyDoubleProperty)}.
- * The output of this calculator is the {@link #rotation} property which can be bound to an external property or used directly to apply a transformation to the camera.
- * This transformation is not implemented here to provide increased flexibility.
+ * This class provides the tools necessary to build a simple controller for computing the
+ * orientation of a JavaFX {@link PerspectiveCamera}. This class is ready to be used with an
+ * {@link EventHandler} via
+ * {@link #createMouseEventHandler(ReadOnlyDoubleProperty, ReadOnlyDoubleProperty)}. The output of
+ * this calculator is the {@link #rotation} property which can be bound to an external property or
+ * used directly to apply a transformation to the camera. This transformation is not implemented
+ * here to provide increased flexibility.
  * <p>
- * Note on the approach use to compute the rotation.
- * The camera is assumed to be navigating on a virtual sphere and directed to its center.
- * Its orientation is computed from its geographic coordinates (latitude, longitude).
- * As for the geographic coordinates:
- * <li> the longitude is in the range [-180 degrees; +180 degrees],
- * <li> the latitude is in the range [-90 degrees; +90 degrees],
- * <li> a latitude of +90 degrees corresponds to the camera located at the north pole looking straight down, 
- * <li> a latitude of -90 degrees corresponds to the camera located at the south pole looking straight up.
+ * Note on the approach use to compute the rotation. The camera is assumed to be navigating on a
+ * virtual sphere and directed to its center. Its orientation is computed from its geographic
+ * coordinates (latitude, longitude). As for the geographic coordinates:
+ * <li>the longitude is in the range [-180 degrees; +180 degrees],
+ * <li>the latitude is in the range [-90 degrees; +90 degrees],
+ * <li>a latitude of +90 degrees corresponds to the camera located at the north pole looking
+ * straight down,
+ * <li>a latitude of -90 degrees corresponds to the camera located at the south pole looking
+ * straight up.
+ *
  * @author Sylvain Bertrand
  */
 public class CameraRotationCalculator
 {
    /**
-    * The current orientation of the camera.
-    * This is the output of this calculator which can be bound to an external property or used directly to apply a transformation to the camera.
+    * The current orientation of the camera. This is the output of this calculator which can be bound
+    * to an external property or used directly to apply a transformation to the camera.
     */
    private final Affine rotation = new Affine();
    /**
-    * Rotation offset computed such that when the {@link #latitude}, {@link #longitude}, and {@link #roll} are all zero, the camera is orientated as follows:
-    * <li> the viewing direction (e.g. z-axis) of the camera is aligned with the given forward axis.
-    * <li> the vertical direction of the screen (e.g. y-axis) is colinear with the given up axis.
+    * Rotation offset computed such that when the {@link #latitude}, {@link #longitude}, and
+    * {@link #roll} are all zero, the camera is orientated as follows:
+    * <li>the viewing direction (e.g. z-axis) of the camera is aligned with the given forward axis.
+    * <li>the vertical direction of the screen (e.g. y-axis) is colinear with the given up axis.
     */
    private final Affine offset = new Affine();
    /**
     * Latitude of the camera on the virtual sphere:
-    * <li> the latitude is in the range [-90 degrees; +90 degrees],
-    * <li> a latitude of +90 degrees corresponds to the camera located at the north pole looking straight down, 
-    * <li> a latitude of -90 degrees corresponds to the camera located at the south pole looking straight up. 
+    * <li>the latitude is in the range [-90 degrees; +90 degrees],
+    * <li>a latitude of +90 degrees corresponds to the camera located at the north pole looking
+    * straight down,
+    * <li>a latitude of -90 degrees corresponds to the camera located at the south pole looking
+    * straight up.
     */
    private final DoubleProperty latitude = new SimpleDoubleProperty(this, "latitude", 0.0);
    /**
     * Longitude of the camera on the virtual sphere:
-    * <li> the longitude is in the range [-180 degrees; +180 degrees],
-    * <li> at a longitude of zero degree, the camera is directed torward the forward axis.
+    * <li>the longitude is in the range [-180 degrees; +180 degrees],
+    * <li>at a longitude of zero degree, the camera is directed torward the forward axis.
     */
    private final DoubleProperty longitude = new SimpleDoubleProperty(this, "longitude", 0.0);
    /**
@@ -75,18 +83,30 @@ public class CameraRotationCalculator
     * When set to true, the camera roll is zeroed to keep the camera level.
     */
    private final BooleanProperty keepRotationLeveled = new SimpleBooleanProperty(this, "keepRotationLeveled", true);
-   /** Condition to trigger the use of the fast modifier to make the camera rotate faster when using the mouse. */
+   /**
+    * Condition to trigger the use of the fast modifier to make the camera rotate faster when using the
+    * mouse.
+    */
    private final ObjectProperty<Predicate<MouseEvent>> fastModifierPredicate = new SimpleObjectProperty<>(this, "fastModifierPredicate", null);
    /** Slow camera rotation modifier when using the mouse. */
    private final DoubleProperty slowModifier = new SimpleDoubleProperty(this, "slowModifier", 0.005);
-   /** Fast camera rotation modifier when using the mouse. It is triggered when the condition held in {@link #fastModifierPredicate} is fulfilled. */
+   /**
+    * Fast camera rotation modifier when using the mouse. It is triggered when the condition held in
+    * {@link #fastModifierPredicate} is fulfilled.
+    */
    private final DoubleProperty fastModifier = new SimpleDoubleProperty(this, "fastModifier", 0.010);
    /** Camera roll modifier when using the mouse. */
    private final DoubleProperty rollModifier = new SimpleDoubleProperty(this, "rollModifier", 0.005);
-   /** Indicates which mouse button triggers the camera rotation when using the {@link EventHandler} via {@link #createMouseEventHandler(ReadOnlyDoubleProperty, ReadOnlyDoubleProperty)}. */
+   /**
+    * Indicates which mouse button triggers the camera rotation when using the {@link EventHandler} via
+    * {@link #createMouseEventHandler(ReadOnlyDoubleProperty, ReadOnlyDoubleProperty)}.
+    */
    private final ObjectProperty<MouseButton> rotationMouseButton = new SimpleObjectProperty<>(this, "rotationMouseButton", MouseButton.PRIMARY);
 
-   /** When set to true, the latitude of the camera is restricted to the range [{@link #minLatitude}, {@link #maxLatitude}]. */
+   /**
+    * When set to true, the latitude of the camera is restricted to the range [{@link #minLatitude},
+    * {@link #maxLatitude}].
+    */
    private final BooleanProperty restrictLatitude = new SimpleBooleanProperty(this, "restrictLatitude", true);
    /** Minimum latitude of the camera. Only used when {@link #restrictLatitude} is set to true. */
    private final DoubleProperty minLatitude = new SimpleDoubleProperty(this, "minLatitude", -Math.PI / 2.0 + 0.2);
@@ -99,7 +119,8 @@ public class CameraRotationCalculator
 
    /**
     * Creates a calculator for the camera rotation.
-    * @param up indicates which way is up.
+    *
+    * @param up      indicates which way is up.
     * @param forward indicates which is forward.
     * @throws RuntimeException if {@code up} and {@code forward} are not orthogonal.
     */
@@ -130,7 +151,8 @@ public class CameraRotationCalculator
 
    /**
     * Creates an {@link EventHandler} to rotate the camera when a mouse click and drag is performed.
-    * @param sceneWidthProperty width of the scene the camera belongs to.
+    *
+    * @param sceneWidthProperty  width of the scene the camera belongs to.
     * @param sceneHeightProperty height of the scene the camera belongs to.
     * @return an {@link EventHandler} to rotate the camera with the mouse.
     */
@@ -188,9 +210,10 @@ public class CameraRotationCalculator
 
    /**
     * Update the camera rotation after applying rotation offsets.
-    * @param deltaLatitude the shift in latitude to apply to the camera rotation.
+    *
+    * @param deltaLatitude  the shift in latitude to apply to the camera rotation.
     * @param deltaLongitude the shift in longitude to apply to the camera rotation.
-    * @param deltaRoll the shift in roll to apply to the camera rotation.
+    * @param deltaRoll      the shift in roll to apply to the camera rotation.
     */
    public void updateRotation(double deltaLatitude, double deltaLongitude, double deltaRoll)
    {
@@ -220,9 +243,10 @@ public class CameraRotationCalculator
 
    /**
     * Computes and sets the camera rotation for given camera position and a given point to focus on.
+    *
     * @param cameraPosition desired camera position. Not modified.
-    * @param focusPoint desired focus position. Not modified.
-    * @param cameraRoll desired camera roll.
+    * @param focusPoint     desired focus position. Not modified.
+    * @param cameraRoll     desired camera roll.
     */
    public void setRotationFromCameraAndFocusPositions(Point3D cameraPosition, Point3D focusPoint, double cameraRoll)
    {
@@ -251,9 +275,10 @@ public class CameraRotationCalculator
 
    /**
     * Sets the camera's latitude, longitude, and roll.
-    * @param latitude the new camera latitude.
+    *
+    * @param latitude  the new camera latitude.
     * @param longitude the new camera longitude.
-    * @param roll the new camera roll.
+    * @param roll      the new camera roll.
     */
    public void setRotation(double latitude, double longitude, double roll)
    {
@@ -283,8 +308,9 @@ public class CameraRotationCalculator
    }
 
    /**
-    * Get the reference to the rotation of the camera.
-    * This is the output of this calculator which can be bound to an external property or used directly to apply a transformation to the camera.
+    * Get the reference to the rotation of the camera. This is the output of this calculator which can
+    * be bound to an external property or used directly to apply a transformation to the camera.
+    *
     * @return the camera's rotation.
     */
    public Affine getRotation()

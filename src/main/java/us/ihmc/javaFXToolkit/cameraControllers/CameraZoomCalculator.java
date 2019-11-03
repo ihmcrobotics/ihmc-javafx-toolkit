@@ -11,27 +11,37 @@ import javafx.scene.transform.Translate;
 import us.ihmc.commons.MathTools;
 
 /**
- * This class provides the tools necessary to build a simple controller for the zoom of a JavaFX {@link PerspectiveCamera}.
- * This class is ready to be used with an {@link EventHandler} via {@link #createScrollEventHandler()}.
- * The output of this calculator is the {@link #zoom} property which can be bound to an external property or a component of {@link Translate} to apply a transformation on the camera.
- * This transformation not implemented here to provide increased flexibility.
+ * This class provides the tools necessary to build a simple controller for the zoom of a JavaFX
+ * {@link PerspectiveCamera}. This class is ready to be used with an {@link EventHandler} via
+ * {@link #createScrollEventHandler()}. The output of this calculator is the {@link #zoom} property
+ * which can be bound to an external property or a component of {@link Translate} to apply a
+ * transformation on the camera. This transformation not implemented here to provide increased
+ * flexibility.
+ *
  * @author Sylvain Bertrand
  */
 public class CameraZoomCalculator
 {
    /**
-    * The current zoom of the camera. In {@link FocusBasedCameraMouseEventHandler} it is used as the distance between the camera and the point it focuses on.
-    * This is the output of this calculator and can be bound to an external property or a component of {@link Translate} to apply a transformation on the camera.
+    * The current zoom of the camera. In {@link FocusBasedCameraMouseEventHandler} it is used as the
+    * distance between the camera and the point it focuses on. This is the output of this calculator
+    * and can be bound to an external property or a component of {@link Translate} to apply a
+    * transformation on the camera.
     */
    private final DoubleProperty zoom = new SimpleDoubleProperty(this, "zoom", 10.0);
    /** Minimum value the zoom can be. */
    private final DoubleProperty minZoom = new SimpleDoubleProperty(this, "minZoom", 0.1);
    /** Maximum value the zoom can be. */
    private final DoubleProperty maxZoom = new SimpleDoubleProperty(this, "maxZoom", 100.0);
-   /** Zoom speed factor with respect to its current value. The larger is the zoom, the faster it "goes". */
+   /**
+    * Zoom speed factor with respect to its current value. The larger is the zoom, the faster it
+    * "goes".
+    */
    private final DoubleProperty zoomSpeedFactor = new SimpleDoubleProperty(this, "zoomSpeedFactor", 0.1);
    /**
-    * <p> Only applicable when using the {@link EventHandler} via {@link #createScrollEventHandler()}. </p>
+    * <p>
+    * Only applicable when using the {@link EventHandler} via {@link #createScrollEventHandler()}.
+    * </p>
     * When set to true, the direction of the zoom is reversed.
     */
    private final BooleanProperty invertZoomDirection = new SimpleBooleanProperty(this, "invertZoomDirection", false);
@@ -41,7 +51,8 @@ public class CameraZoomCalculator
    }
 
    /**
-    * @return an {@link EventHandler} for {@link ScrollEvent} that uses the mouse wheel to update the zoom value.
+    * @return an {@link EventHandler} for {@link ScrollEvent} that uses the mouse wheel to update the
+    *         zoom value.
     */
    public EventHandler<ScrollEvent> createScrollEventHandler()
    {
