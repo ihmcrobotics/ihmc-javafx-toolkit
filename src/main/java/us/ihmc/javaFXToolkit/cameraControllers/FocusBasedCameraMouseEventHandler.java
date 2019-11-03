@@ -205,6 +205,11 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
    // Zoom properties
    //-----------------------------------------------------
 
+   public CameraZoomCalculator getZoomCalculator()
+   {
+      return zoomCalculator;
+   }
+
    /** See {@link CameraZoomCalculator#minZoomProperty()}. */
    public final DoubleProperty minZoomProperty()
    {
@@ -280,6 +285,11 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
    //-----------------------------------------------------
    // Rotation properties
    //-----------------------------------------------------
+
+   public CameraRotationCalculator getRotationCalculator()
+   {
+      return rotationCalculator;
+   }
 
    /** See {@link CameraRotationCalculator#latitudeProperty()}. */
    public final DoubleProperty latitudeProperty()
@@ -500,6 +510,11 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
    //-----------------------------------------------------
    // Translation properties
    //-----------------------------------------------------
+
+   public CameraTranslationCalculator getTranslationCalculator()
+   {
+      return translationCalculator;
+   }
 
    /** See {@link CameraTranslationCalculator#maxLatitudeProperty()}. */
    public final BooleanProperty keepTranslationLeveledProperty()
