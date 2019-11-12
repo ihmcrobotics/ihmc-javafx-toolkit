@@ -67,27 +67,29 @@ public class SharedMemoryJavaFXMessager extends SharedMemoryMessager implements 
    public <T> void registerJavaFXSyncedTopicListener(Topic<T> topic, TopicListener<T> listener)
    {
       JavaFXSyncedTopicListeners topicListeners = javaFXSyncedTopicListeners.get(topic);
+
       if (topicListeners == null)
       {
          JavaFXSyncedTopicListeners newTopicListeners = new JavaFXSyncedTopicListeners(topic);
          topicListeners = newTopicListeners;
 
-         try
-         {
-            if (!readingListeners && Platform.isFxApplicationThread())
-            { // It appears to not be enough to check for application thread somehow.
-               javaFXSyncedTopicListeners.put(topic, newTopicListeners);
-            }
-            else // The following one can throw an exception if the JavaFX thread has not started yet.
-            {
-               Platform.runLater(() -> javaFXSyncedTopicListeners.put(topic, newTopicListeners));
-            }
-         }
-         catch (IllegalStateException e)
-         { // The JavaFX thread has not started yet, no need to invoke Platform.runLater(...).
+         if (!readingListeners && Platform.isFxApplicationThread())
+         { // It appears to not be enough to check for application thread somehow.
             javaFXSyncedTopicListeners.put(topic, newTopicListeners);
          }
+         else // The following one can throw an exception if the JavaFX thread has not started yet.
+         {
+            try
+            { // Postpone the entire registration in case JavaFXSyncedTopicListeners has been created by another caller.
+               Platform.runLater(() -> registerJavaFXSyncedTopicListener(topic, listener));
+            }
+            catch (IllegalStateException e)
+            { // The JavaFX thread has not started yet, no need to invoke Platform.runLater(...).
+               javaFXSyncedTopicListeners.put(topic, newTopicListeners);
+            }
+         }
       }
+
       topicListeners.addListener(listener);
    }
 
@@ -142,7 +144,11 @@ public class SharedMemoryJavaFXMessager extends SharedMemoryMessager implements 
 
       private JavaFXSyncedTopicListeners(Topic<?> topic)
       {
-         registerTopicListener(topic, message -> inputQueue.add(message));
+         registerTopicListener(topic, message ->
+         {
+            if (message != null)
+               inputQueue.add(message);
+         });
       }
 
       private void addListener(TopicListener<?> listener)
