@@ -25,20 +25,24 @@ import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import us.ihmc.commons.Epsilons;
+import us.ihmc.commons.MathTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.javaFXToolkit.JavaFXTools;
-import us.ihmc.commons.MathTools;
 
 /**
- * This class provides a simple controller for a JavaFX {@link PerspectiveCamera}.
- * The control is achieved via event handling by adding this controller as an {@link EventHandler} to the scene or sub-scene the camera is attached to.
+ * This class provides a simple controller for a JavaFX {@link PerspectiveCamera}. The control is
+ * achieved via event handling by adding this controller as an {@link EventHandler} to the scene or
+ * sub-scene the camera is attached to.
  * <p>
  * Behavior of this camera controller:
- * <li> The camera is always pointing toward a focus point.
- * <li> The focus point can be translated via keyboard bindings, or instantly moved with a mouse shortcut only if {@link #setupRayBasedFocusTranslation(Predicate)} or {@link #enableShiftClickFocusTranslation()} has been called.
- * <li> The camera zoom can be changed vi the mouse wheel.
- * <li> Using the mouse, the camera can be rotated around the focus point.
+ * <li>The camera is always pointing toward a focus point.
+ * <li>The focus point can be translated via keyboard bindings, or instantly moved with a mouse
+ * shortcut only if {@link #setupRayBasedFocusTranslation(Predicate)} or
+ * {@link #enableShiftClickFocusTranslation()} has been called.
+ * <li>The camera zoom can be changed vi the mouse wheel.
+ * <li>Using the mouse, the camera can be rotated around the focus point.
+ *
  * @author Sylvain Bertrand
  */
 public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
@@ -54,6 +58,7 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
    private final CameraZoomCalculator zoomCalculator = new CameraZoomCalculator();
    private final CameraRotationCalculator rotationCalculator;
    private final CameraTranslationCalculator translationCalculator;
+   private final CameraNodeTracker nodeTracker;
 
    private final EventHandler<ScrollEvent> zoomEventHandler = zoomCalculator.createScrollEventHandler();
    private final EventHandler<MouseEvent> rotationEventHandler;
@@ -86,10 +91,12 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
       translationCalculator.setZoom(zoomCalculator.zoomProperty());
       focusPointTranslation = translationCalculator.getTranslation();
       translationEventHandler = translationCalculator.createKeyEventHandler();
+      nodeTracker = new CameraNodeTracker(focusPointTranslation);
+      Translate nodeTrackingTranslate = nodeTracker.getNodeTrackingTranslate();
 
       changeCameraPosition(-2.0, 0.7, 1.0);
 
-      camera.getTransforms().addAll(focusPointTranslation, cameraOrientation, offsetFromFocusPoint);
+      camera.getTransforms().addAll(nodeTrackingTranslate, focusPointTranslation, cameraOrientation, offsetFromFocusPoint);
 
       Point3D cameraPosition = new Point3D();
       JavaFXTools.applyTranform(camera.getLocalToSceneTransform(), cameraPosition);
@@ -99,7 +106,7 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
       material.setDiffuseColor(Color.DARKRED);
       material.setSpecularColor(Color.RED);
       focusPointViz.setMaterial(material);
-      focusPointViz.getTransforms().add(focusPointTranslation);
+      focusPointViz.getTransforms().addAll(nodeTrackingTranslate, focusPointTranslation);
 
       new AnimationTimer()
       {
@@ -143,7 +150,19 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
 
    public void enableShiftClickFocusTranslation()
    {
-      setupRayBasedFocusTranslation(event -> event.isShiftDown());
+      setupRayBasedFocusTranslation(event ->
+      {
+         if (!event.isShiftDown())
+            return false;
+         if (event.getButton() != MouseButton.PRIMARY)
+            return false;
+         if (!event.isStillSincePress())
+            return false;
+         if (event.getEventType() != MouseEvent.MOUSE_CLICKED)
+            return false;
+
+         return true;
+      });
    }
 
    public void setupRayBasedFocusTranslation(Predicate<MouseEvent> condition)
@@ -153,10 +172,7 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
          @Override
          public void handle(MouseEvent event)
          {
-            if (event.getButton() != MouseButton.PRIMARY)
-               return;
-
-            if (condition.test(event) && event.isStillSincePress() && event.getEventType() == MouseEvent.MOUSE_CLICKED)
+            if (condition.test(event))
             {
                PickResult pickResult = event.getPickResult();
                Node intersectedNode = pickResult.getIntersectedNode();
@@ -164,6 +180,9 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
                   return;
                javafx.geometry.Point3D localPoint = pickResult.getIntersectedPoint();
                javafx.geometry.Point3D scenePoint = intersectedNode.getLocalToSceneTransform().transform(localPoint);
+
+               nodeTracker.setNodeToTrack(null);
+               nodeTracker.resetTranslate();
                focusPointTranslation.setX(scenePoint.getX());
                focusPointTranslation.setY(scenePoint.getY());
                focusPointTranslation.setZ(scenePoint.getZ());
@@ -191,6 +210,11 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
    //-----------------------------------------------------
    // Zoom properties
    //-----------------------------------------------------
+
+   public CameraZoomCalculator getZoomCalculator()
+   {
+      return zoomCalculator;
+   }
 
    /** See {@link CameraZoomCalculator#minZoomProperty()}. */
    public final DoubleProperty minZoomProperty()
@@ -267,6 +291,11 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
    //-----------------------------------------------------
    // Rotation properties
    //-----------------------------------------------------
+
+   public CameraRotationCalculator getRotationCalculator()
+   {
+      return rotationCalculator;
+   }
 
    /** See {@link CameraRotationCalculator#latitudeProperty()}. */
    public final DoubleProperty latitudeProperty()
@@ -488,6 +517,11 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
    // Translation properties
    //-----------------------------------------------------
 
+   public CameraTranslationCalculator getTranslationCalculator()
+   {
+      return translationCalculator;
+   }
+
    /** See {@link CameraTranslationCalculator#maxLatitudeProperty()}. */
    public final BooleanProperty keepTranslationLeveledProperty()
    {
@@ -702,5 +736,10 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
    public final void setDownKey(final KeyCode downKey)
    {
       downKeyProperty().set(downKey);
+   }
+
+   public CameraNodeTracker getNodeTracker()
+   {
+      return nodeTracker;
    }
 }

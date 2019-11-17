@@ -21,36 +21,54 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.javaFXToolkit.JavaFXTools;
 
 /**
- * This class provides the tools necessary to build a simple controller for computing the translation of a JavaFX {@link PerspectiveCamera}.
- * This class is ready to be used with an {@link EventHandler} via {@link #createKeyEventHandler()}.
- * The output of this calculator is the {@link #translation} property which can be bound to an external property or used directly to apply a transformation to the camera.
- * This transformation is not implemented here to provide increased flexibility.
- * The translation computed by this calculator is expressed in world frame, i.e. before applying a rotation to the camera.
+ * This class provides the tools necessary to build a simple controller for computing the
+ * translation of a JavaFX {@link PerspectiveCamera}. This class is ready to be used with an
+ * {@link EventHandler} via {@link #createKeyEventHandler()}. The output of this calculator is the
+ * {@link #translation} property which can be bound to an external property or used directly to
+ * apply a transformation to the camera. This transformation is not implemented here to provide
+ * increased flexibility. The translation computed by this calculator is expressed in world frame,
+ * i.e. before applying a rotation to the camera.
+ *
  * @author Sylvain Bertrand
  */
 public class CameraTranslationCalculator
 {
    /**
-    * The current translation of the camera.
-    * This is the output of this calculator which can be bound to an external property or used directly to apply a transformation to the camera.
+    * The current translation of the camera. This is the output of this calculator which can be bound
+    * to an external property or used directly to apply a transformation to the camera.
     */
    private final Translate translation = new Translate();
    /** Current orientation of the camera necessary when translating the camera in its local frame. */
    private final ObjectProperty<Transform> cameraOrientation = new SimpleObjectProperty<>(this, "cameraOrientation", null);
-   /** Current zoom of the camera. It is used to vary the translation speed when using the keyboard. As the zoom increases, the translation speed increases too. */
+   /**
+    * Current zoom of the camera. It is used to vary the translation speed when using the keyboard. As
+    * the zoom increases, the translation speed increases too.
+    */
    private ReadOnlyDoubleProperty currentZoom = null;
 
-   /** When set to true, the translations forward/backward and left/right will be performed on a horizontal plane, i.e. perpendicular the given up axis. */
+   /**
+    * When set to true, the translations forward/backward and left/right will be performed on a
+    * horizontal plane, i.e. perpendicular the given up axis.
+    */
    private final BooleanProperty keepTranslationLeveled = new SimpleBooleanProperty(this, "keepTranslationLeveled", true);
-   /** Condition to trigger the use of the fast modifier to make the camera translate faster when using the keyboard. */
+   /**
+    * Condition to trigger the use of the fast modifier to make the camera translate faster when using
+    * the keyboard.
+    */
    private final ObjectProperty<Predicate<KeyEvent>> fastModifierPredicate = new SimpleObjectProperty<>(this, "fastModifierPredicate", null);
    /** Slow camera translation modifier when using the keyboard. */
    private final DoubleProperty slowModifier = new SimpleDoubleProperty(this, "slowModifier", 0.005);
-   /** Fast camera translation modifier when using the keyboard. It is triggered when the condition held in {@link #fastModifierPredicate} is fulfilled. */
+   /**
+    * Fast camera translation modifier when using the keyboard. It is triggered when the condition held
+    * in {@link #fastModifierPredicate} is fulfilled.
+    */
    private final DoubleProperty fastModifier = new SimpleDoubleProperty(this, "fastModifier", 0.010);
    /** Minimum value of a translation offset when using the keyboard. */
    private final DoubleProperty minTranslationOffset = new SimpleDoubleProperty(this, "minTranslationOffset", 0.1);
-   /** The zoom-to-translation pow is used to define the relation between the current zoom value and the translation speed of the camera. */
+   /**
+    * The zoom-to-translation pow is used to define the relation between the current zoom value and the
+    * translation speed of the camera.
+    */
    private final DoubleProperty zoomToTranslationPow = new SimpleDoubleProperty(this, "zoomToTranslationPow", 1.5);
 
    /** Key binding for moving the camera forward. Its default value is: {@code KeyCode.W}. */
@@ -72,6 +90,7 @@ public class CameraTranslationCalculator
 
    /**
     * Creates a calculator for the camera translation.
+    *
     * @param up indicates which way is up.
     */
    public CameraTranslationCalculator(Vector3D up)
@@ -81,6 +100,7 @@ public class CameraTranslationCalculator
 
    /**
     * Creates an {@link EventHandler} to translate the camera using keyboard bindings.
+    *
     * @return an {@link EventHandler} to translate the camera with the keyboard.
     */
    public EventHandler<KeyEvent> createKeyEventHandler()
@@ -139,6 +159,7 @@ public class CameraTranslationCalculator
 
    /**
     * Update the camera translation after applying a translation offset in the camera local frame.
+    *
     * @param translationOffset the translation offset in local frame to apply. Not modified.
     */
    public void updateObserverTranslation(Vector3D translationOffset)
@@ -148,6 +169,7 @@ public class CameraTranslationCalculator
 
    /**
     * Update the camera translation after applying a translation offset in the camera local frame.
+    *
     * @param dx the forward/backward translation offset in the camera local frame.
     * @param dy the left/right translation offset in the camera local frame.
     * @param dz the up/down translation offset in the camera local frame.
@@ -189,6 +211,7 @@ public class CameraTranslationCalculator
 
    /**
     * Update the camera translation after applying a translation offset in the world frame.
+    *
     * @param dx the translation offset along the world x-axis.
     * @param dy the translation offset along the world y-axis.
     * @param dz the translation offset along the world z-axis.
@@ -200,7 +223,9 @@ public class CameraTranslationCalculator
    }
 
    /**
-    * Sets the reference to the current camera orientation to enable translation in the camera frame, i.e. first person.
+    * Sets the reference to the current camera orientation to enable translation in the camera frame,
+    * i.e. first person.
+    *
     * @param cameraOrientation the reference to the current camera orientation. Not modified.
     */
    public void setCameraOrientation(Transform cameraOrientation)
@@ -209,7 +234,9 @@ public class CameraTranslationCalculator
    }
 
    /**
-    * Sets the reference to the current camera zoom to enable translation speed varying on the zoom value.
+    * Sets the reference to the current camera zoom to enable translation speed varying on the zoom
+    * value.
+    *
     * @param zoom
     */
    public void setZoom(ReadOnlyDoubleProperty zoom)
@@ -218,8 +245,9 @@ public class CameraTranslationCalculator
    }
 
    /**
-    * Get the reference to the translation of the camera.
-    * This is the output of this calculator which can be bound to an external property or used directly to apply a transformation to the camera.
+    * Get the reference to the translation of the camera. This is the output of this calculator which
+    * can be bound to an external property or used directly to apply a transformation to the camera.
+    *
     * @return the camera's translation.
     */
    public Translate getTranslation()

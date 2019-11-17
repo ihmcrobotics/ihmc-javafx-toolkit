@@ -8,9 +8,11 @@ import javafx.scene.transform.Translate;
 
 /**
  * Use {@link FocusBasedCameraMouseEventHandler} instead.
+ *
  * @deprecated
  * @author Sylvain Bertrand
  */
+@Deprecated
 public class SimpleCameraKeyboardEventHandler implements EventHandler<KeyEvent>
 {
    private final Translate translate = new Translate(0.0, 0.0, 0.0);
