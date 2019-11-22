@@ -3,6 +3,10 @@ package us.ihmc.javaFXToolkit.cameraControllers;
 import java.util.function.Predicate;
 
 import javafx.animation.AnimationTimer;
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
@@ -24,6 +28,7 @@ import javafx.scene.shape.Sphere;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
+import javafx.util.Duration;
 import us.ihmc.commons.Epsilons;
 import us.ihmc.commons.MathTools;
 import us.ihmc.euclid.tuple3D.Point3D;
@@ -167,6 +172,11 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
 
    public void setupRayBasedFocusTranslation(Predicate<MouseEvent> condition)
    {
+      setupRayBasedFocusTranslation(condition, 0.1);
+   }
+
+   public void setupRayBasedFocusTranslation(Predicate<MouseEvent> condition, double animationDuration)
+   {
       rayBasedFocusTranslation = new EventHandler<MouseEvent>()
       {
          @Override
@@ -183,9 +193,21 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
 
                nodeTracker.setNodeToTrack(null);
                nodeTracker.resetTranslate();
-               focusPointTranslation.setX(scenePoint.getX());
-               focusPointTranslation.setY(scenePoint.getY());
-               focusPointTranslation.setZ(scenePoint.getZ());
+
+               if (animationDuration > 0.0)
+               {
+                  Timeline animation = new Timeline(new KeyFrame(Duration.seconds(animationDuration),
+                                                                 new KeyValue(focusPointTranslation.xProperty(), scenePoint.getX(), Interpolator.EASE_BOTH),
+                                                                 new KeyValue(focusPointTranslation.yProperty(), scenePoint.getY(), Interpolator.EASE_BOTH),
+                                                                 new KeyValue(focusPointTranslation.zProperty(), scenePoint.getZ(), Interpolator.EASE_BOTH)));
+                  animation.playFromStart();
+               }
+               else
+               {
+                  focusPointTranslation.setX(scenePoint.getX());
+                  focusPointTranslation.setY(scenePoint.getY());
+                  focusPointTranslation.setZ(scenePoint.getZ());
+               }
             }
          }
       };
