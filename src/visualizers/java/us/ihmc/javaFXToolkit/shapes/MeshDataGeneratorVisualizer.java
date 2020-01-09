@@ -2,7 +2,6 @@ package us.ihmc.javaFXToolkit.shapes;
 
 import java.util.Random;
 
-import javafx.application.Application;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Material;
 import javafx.scene.paint.PhongMaterial;
@@ -15,11 +14,11 @@ import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.graphicsDescription.MeshDataGenerator;
 import us.ihmc.javaFXToolkit.graphics.JavaFXMeshDataInterpreter;
 import us.ihmc.javaFXToolkit.scenes.View3DFactory;
+import us.ihmc.javaFXToolkit.starter.ApplicationRunner;
 
-public class MeshDataGeneratorVisualizer extends Application
+public class MeshDataGeneratorVisualizer
 {
-   @Override
-   public void start(Stage primaryStage) throws Exception
+   public MeshDataGeneratorVisualizer(Stage primaryStage)
    {
       primaryStage.setTitle(getClass().getSimpleName());
 
@@ -147,6 +146,6 @@ public class MeshDataGeneratorVisualizer extends Application
 
    public static void main(String[] args)
    {
-      launch(args);
+      ApplicationRunner.runApplication(MeshDataGeneratorVisualizer::new);
    }
 }

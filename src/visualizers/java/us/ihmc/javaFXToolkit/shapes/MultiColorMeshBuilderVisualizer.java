@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import javafx.application.Application;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
@@ -14,21 +13,16 @@ import us.ihmc.commons.RandomNumbers;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D32;
 import us.ihmc.javaFXToolkit.scenes.View3DFactory;
+import us.ihmc.javaFXToolkit.starter.ApplicationRunner;
 
-public class MultiColorMeshBuilderVisualizer extends Application
+public class MultiColorMeshBuilderVisualizer
 {
    private enum MeshToDisplay {BOX, LINE, MULTI_LINE}
    private static final MeshToDisplay MESH_TO_DISPLAY = MeshToDisplay.BOX;
 
    private Random random = new Random(23423L);
 
-   public MultiColorMeshBuilderVisualizer()
-   {
-      // TODO Auto-generated constructor stub
-   }
-
-   @Override
-   public void start(Stage primaryStage) throws Exception
+   public MultiColorMeshBuilderVisualizer(Stage primaryStage)
    {
       primaryStage.setTitle(getClass().getSimpleName());
 
@@ -126,6 +120,6 @@ public class MultiColorMeshBuilderVisualizer extends Application
 
    public static void main(String[] args)
    {
-      Application.launch(args);
+      ApplicationRunner.runApplication(MultiColorMeshBuilderVisualizer::new);
    }
 }
