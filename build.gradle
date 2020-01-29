@@ -15,7 +15,6 @@ ihmc {
 }
 
 mainDependencies {
-   api("us.ihmc:ihmc-yovariables:0.3.11")
    api("net.sf.trove4j:trove4j:3.0.3")
    api("org.apache.commons:commons-lang3:3.9")
 
@@ -24,6 +23,7 @@ mainDependencies {
    }
 
    api("us.ihmc:euclid:0.12.2")
+   api("us.ihmc:ihmc-yovariables:0.4.0")
    api("us.ihmc:ihmc-messager:0.1.3")
    api("us.ihmc:ihmc-graphics-description:0.12.13")
    api("us.ihmc:jassimp:4.0.0-ihmc3")
