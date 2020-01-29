@@ -1,6 +1,5 @@
 package us.ihmc.javaFXToolkit.shapes;
 
-import javafx.application.Application;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Material;
 import javafx.scene.paint.PhongMaterial;
@@ -8,16 +7,15 @@ import javafx.scene.shape.MeshView;
 import javafx.stage.Stage;
 import us.ihmc.commons.Conversions;
 import us.ihmc.euclid.tuple3D.Point3D;
-import us.ihmc.graphicsDescription.SegmentedLine3DMeshDataGenerator;
 import us.ihmc.graphicsDescription.MeshDataHolder;
+import us.ihmc.graphicsDescription.SegmentedLine3DMeshDataGenerator;
 import us.ihmc.javaFXToolkit.graphics.JavaFXMeshDataInterpreter;
 import us.ihmc.javaFXToolkit.scenes.View3DFactory;
+import us.ihmc.javaFXToolkit.starter.ApplicationRunner;
 
-public class SegmentedLine3DMeshDataGeneratorVisualizer extends Application
+public class SegmentedLine3DMeshDataGeneratorVisualizer
 {
-
-   @Override
-   public void start(Stage primaryStage) throws Exception
+   public SegmentedLine3DMeshDataGeneratorVisualizer(Stage primaryStage)
    {
       primaryStage.setTitle(getClass().getSimpleName());
 
@@ -93,6 +91,6 @@ public class SegmentedLine3DMeshDataGeneratorVisualizer extends Application
 
    public static void main(String[] args)
    {
-      launch();
+      ApplicationRunner.runApplication(SegmentedLine3DMeshDataGeneratorVisualizer::new);
    }
 }
