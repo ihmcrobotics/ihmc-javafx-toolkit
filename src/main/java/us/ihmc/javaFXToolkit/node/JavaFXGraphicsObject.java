@@ -112,7 +112,7 @@ public class JavaFXGraphicsObject extends Graphics3DInstructionExecutor
       MeshView[] outputModelMeshes = new MeshView[0];
       try
       {
-         outputModelMeshes = JAssImpJavaFXTools.getJavaFxMeshes(graphics3DAddModelFile.getFileName());
+         outputModelMeshes = JAssImpJavaFXTools.getJavaFxMeshes(graphics3DAddModelFile.getFileName(), graphics3DAddModelFile.getResourceClassLoader());
       }
       catch (URISyntaxException | IOException e)
       {
