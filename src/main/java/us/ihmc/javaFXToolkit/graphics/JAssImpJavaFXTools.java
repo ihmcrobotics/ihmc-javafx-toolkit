@@ -56,6 +56,11 @@ public class JAssImpJavaFXTools
 
    public static MeshView[] getJavaFxMeshes(String meshFileName) throws URISyntaxException, IOException
    {
+      return getJavaFxMeshes(meshFileName, null);
+   }
+
+   public static MeshView[] getJavaFxMeshes(String meshFileName, ClassLoader resourceClassLoader) throws URISyntaxException, IOException
+   {
       HashSet<AiPostProcessSteps> aiPostProcessSteps = new HashSet<>();
       aiPostProcessSteps.add(AiPostProcessSteps.FLIP_UVS);
       //      aiPostProcessSteps.add(AiPostProcessSteps.OPTIMIZE_GRAPH); // There are bugs with OPTIMIZE GRAPH that messes up transforms.
@@ -64,7 +69,10 @@ public class JAssImpJavaFXTools
       AiScene aiScene;
       try
       {
-         aiScene = IHMCJassimp.importFile(meshFileName, aiPostProcessSteps, new AiClassLoaderIOSystem(JAssImpJavaFXTools.class.getClassLoader()));
+         if (resourceClassLoader == null)
+            resourceClassLoader = JAssImpJavaFXTools.class.getClassLoader();
+
+         aiScene = IHMCJassimp.importFile(meshFileName, aiPostProcessSteps, new AiClassLoaderIOSystem(resourceClassLoader));
 
          AiNode sceneRoot = aiScene.getSceneRoot(builtinWrapperProvider);
 
@@ -160,11 +168,13 @@ public class JAssImpJavaFXTools
                   int currentIndex = k + (3 * j);
                   int faceVertexIndex = aiMesh.getFaceVertex(j, k);
 
-                  vertices[currentIndex] = new Point3D32(aiMesh.getPositionX(faceVertexIndex), aiMesh.getPositionY(faceVertexIndex),
-                        aiMesh.getPositionZ(faceVertexIndex));
+                  vertices[currentIndex] = new Point3D32(aiMesh.getPositionX(faceVertexIndex),
+                                                         aiMesh.getPositionY(faceVertexIndex),
+                                                         aiMesh.getPositionZ(faceVertexIndex));
 
-                  vertexNormals[currentIndex] = new Vector3D32(aiMesh.getNormalX(faceVertexIndex), aiMesh.getNormalY(faceVertexIndex),
-                        aiMesh.getNormalZ(faceVertexIndex));
+                  vertexNormals[currentIndex] = new Vector3D32(aiMesh.getNormalX(faceVertexIndex),
+                                                               aiMesh.getNormalY(faceVertexIndex),
+                                                               aiMesh.getNormalZ(faceVertexIndex));
 
                   if (aiMaterial != null && aiMesh.getNumUVComponents(aiMaterial.getTextureUVIndex(AiTextureType.DIFFUSE, uvIndexToUse)) == 2)
                   {
@@ -187,7 +197,7 @@ public class JAssImpJavaFXTools
 
             meshDataHolders[i] = new MeshDataHolder(vertices, texturePoints, triangleIndices, vertexNormals);
          }
-         
+
          MeshView[] meshViews = new MeshView[meshDataHolders.length];
 
          for (int i = 0; i < meshDataHolders.length; i++)
@@ -201,7 +211,7 @@ public class JAssImpJavaFXTools
             meshView.getTransforms().add(javaFxAffineToPack);
             meshViews[i] = meshView;
          }
-         
+
          return meshViews;
       }
       catch (IOException e)
