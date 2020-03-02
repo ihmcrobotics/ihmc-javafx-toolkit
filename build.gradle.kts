@@ -28,6 +28,7 @@ mainDependencies {
 
    api("org.fxyz3d:fxyz3d:0.1.1") {
       exclude(group = "java3d", module = "vecmath")
+      exclude(group = "org.slf4j", module = "slf4j-simple")
    }
 
    api("us.ihmc:euclid:0.12.2")
