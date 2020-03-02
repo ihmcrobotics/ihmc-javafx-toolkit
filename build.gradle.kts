@@ -37,13 +37,12 @@ mainDependencies {
    api("us.ihmc:ihmc-graphics-description:0.14.1")
    api("us.ihmc:jassimp:4.0.0-ihmc5")
 
-   api("org.openjfx:javafx-base:13.0.1:win")
-   api("org.openjfx:javafx-controls:13.0.1:win")
-   api("org.openjfx:javafx-graphics:13.0.1:win")
-   api("org.openjfx:javafx-graphics:13.0.1:mac")
-   api("org.openjfx:javafx-graphics:13.0.1:linux")
-   api("org.openjfx:javafx-fxml:13.0.1:win")
-   api("org.openjfx:javafx-swing:13.0.1:win")
+   var javaFXVersion = "11.0.2"
+   api(ihmc.javaFXModule("base", javaFXVersion))
+   api(ihmc.javaFXModule("controls", javaFXVersion))
+   api(ihmc.javaFXModule("graphics", javaFXVersion))
+   api(ihmc.javaFXModule("fxml", javaFXVersion))
+   api(ihmc.javaFXModule("swing", javaFXVersion))
 }
 
 visualizersDependencies {
