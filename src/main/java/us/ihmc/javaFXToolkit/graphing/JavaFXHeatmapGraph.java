@@ -22,16 +22,16 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import us.ihmc.commons.Epsilons;
+import us.ihmc.commons.MathTools;
 import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.tuple2D.Point2D;
-import us.ihmc.graphicsDescription.color.ColorConversions;
 import us.ihmc.graphicsDescription.color.Gradient;
+import us.ihmc.graphicsDescription.graphInterfaces.GraphIndicesHolder;
+import us.ihmc.graphicsDescription.graphInterfaces.SelectedVariableHolder;
+import us.ihmc.javaFXToolkit.JavaFXTools;
 import us.ihmc.yoVariables.dataBuffer.DataEntry;
 import us.ihmc.yoVariables.dataBuffer.DataEntryHolder;
 import us.ihmc.yoVariables.dataBuffer.TimeDataHolder;
-import us.ihmc.graphicsDescription.graphInterfaces.GraphIndicesHolder;
-import us.ihmc.graphicsDescription.graphInterfaces.SelectedVariableHolder;
-import us.ihmc.commons.MathTools;
 import us.ihmc.yoVariables.registry.YoVariableRegistry;
 import us.ihmc.yoVariables.variable.YoDouble;
 
@@ -240,7 +240,7 @@ public class JavaFXHeatmapGraph
    {
       double maxHeat = 30.0;
       int heatIndex = (int) MathTools.roundToPrecision(MathTools.clamp((heat / maxHeat) * 500.0, 0.0, 499.0), 1.0);
-      return ColorConversions.awtToJfx(rainbow[heatIndex]);
+      return JavaFXTools.awtToJfx(rainbow[heatIndex]);
    }
 
    private void fillRect(double x, double y, double width, double height)
