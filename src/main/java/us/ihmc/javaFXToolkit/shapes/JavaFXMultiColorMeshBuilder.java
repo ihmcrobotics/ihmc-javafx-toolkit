@@ -24,10 +24,8 @@ import us.ihmc.graphicsDescription.TexCoord2f;
  * Based on a {@link JavaFXMeshBuilder}, this class can combine different meshes with different colors into a single mesh.
  * This is done by using a {@link TextureColorPalette}. The texture coordinates of the mesh vertices are recomputed and mapped to an {@link Image} holding the set of usable colors.
  * Once the mesh is complete, the user can render it by creating a {@link MeshView} giving it the {@link Mesh} from {@link #generateMesh()} and the {@link Material} from {@link #generateMaterial()}.
- */
-/**
- * @author Sylvain Bertrand
  *
+ * @author Sylvain Bertrand
  */
 public class JavaFXMultiColorMeshBuilder
 {

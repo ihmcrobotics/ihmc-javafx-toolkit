@@ -106,8 +106,15 @@ public abstract class JavaFXTools
 
    public static void convertTransformToRotationMatrix(Transform transform, RotationMatrix rotationToPack)
    {
-      rotationToPack.set(transform.getMxx(), transform.getMxy(), transform.getMxz(), transform.getMyx(), transform.getMyy(), transform.getMyz(),
-                         transform.getMzx(), transform.getMzy(), transform.getMzz());
+      rotationToPack.set(transform.getMxx(),
+                         transform.getMxy(),
+                         transform.getMxz(),
+                         transform.getMyx(),
+                         transform.getMyy(),
+                         transform.getMyz(),
+                         transform.getMzx(),
+                         transform.getMzy(),
+                         transform.getMzz());
    }
 
    public static Affine createRigidBodyTransformToAffine(RigidBodyTransform rigidBodyTransform)
@@ -195,5 +202,15 @@ public abstract class JavaFXTools
       translateToModify.setX(translateToModify.getX() - offset.getX());
       translateToModify.setY(translateToModify.getY() - offset.getY());
       translateToModify.setZ(translateToModify.getZ() - offset.getZ());
+   }
+
+   public static java.awt.Color jfxToAwt(javafx.scene.paint.Color jfxColor)
+   {
+      return new java.awt.Color((float) jfxColor.getRed(), (float) jfxColor.getGreen(), (float) jfxColor.getBlue(), (float) jfxColor.getOpacity());
+   }
+
+   public static javafx.scene.paint.Color awtToJfx(java.awt.Color awtColor)
+   {
+      return javafx.scene.paint.Color.rgb(awtColor.getRed(), awtColor.getGreen(), awtColor.getBlue(), awtColor.getAlpha() / 255.0);
    }
 }
