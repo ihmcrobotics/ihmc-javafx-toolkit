@@ -31,10 +31,10 @@ mainDependencies {
       exclude(group = "org.slf4j", module = "slf4j-simple")
    }
 
-   api("us.ihmc:euclid:0.13.1")
-   api("us.ihmc:ihmc-yovariables:0.5.0")
+   api("us.ihmc:euclid:0.14.0")
+   api("us.ihmc:ihmc-yovariables:0.6.0")
    api("us.ihmc:ihmc-messager:0.1.4")
-   api("us.ihmc:ihmc-graphics-description:0.15.0")
+   api("us.ihmc:ihmc-graphics-description:0.16.0")
    api("us.ihmc:jassimp:4.0.0-ihmc5")
 
    var javaFXVersion = "11.0.2"
