@@ -33,6 +33,7 @@ import us.ihmc.commons.Epsilons;
 import us.ihmc.commons.MathTools;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.javaFXToolkit.JavaFXTools;
 
 /**
@@ -72,7 +73,7 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
    private final PerspectiveCamera camera;
 
    public FocusBasedCameraMouseEventHandler(ReadOnlyDoubleProperty sceneWidthProperty, ReadOnlyDoubleProperty sceneHeightProperty, PerspectiveCamera camera,
-                                            Vector3D up, Vector3D forward)
+                                            Vector3DReadOnly up, Vector3DReadOnly forward)
    {
       this.camera = camera;
       Vector3D left = new Vector3D();

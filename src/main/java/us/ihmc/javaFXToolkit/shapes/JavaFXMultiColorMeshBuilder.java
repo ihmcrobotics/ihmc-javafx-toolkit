@@ -3,14 +3,16 @@ package us.ihmc.javaFXToolkit.shapes;
 import java.util.Arrays;
 import java.util.List;
 
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Material;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Mesh;
-import us.ihmc.euclid.axisAngle.AxisAngle;
-import us.ihmc.euclid.geometry.ConvexPolygon2D;
-import us.ihmc.euclid.transform.RigidBodyTransform;
-import us.ihmc.euclid.tuple2D.Point2D;
+import javafx.scene.shape.MeshView;
+import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
+import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
+import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
+import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Point3D32;
 import us.ihmc.euclid.tuple3D.Vector3D32;
@@ -107,7 +109,7 @@ public class JavaFXMultiColorMeshBuilder
     *                    modified.
     * @param color       color of the cone. Color accuracy depends on the color palette in use.
     */
-   public void addCone(double height, double radius, Tuple3DReadOnly offset, AxisAngle orientation, Color color)
+   public void addCone(double height, double radius, Tuple3DReadOnly offset, Orientation3DReadOnly orientation, Color color)
    {
       addMesh(MeshDataGenerator.Cone(height, radius, DEFAULT_RES), offset, orientation, color);
    }
@@ -175,7 +177,7 @@ public class JavaFXMultiColorMeshBuilder
     *                    modified.
     * @param color       color of the cylinder. Color accuracy depends on the color palette in use.
     */
-   public void addCylinder(double height, double radius, Tuple3DReadOnly offset, AxisAngle orientation, Color color)
+   public void addCylinder(double height, double radius, Tuple3DReadOnly offset, Orientation3DReadOnly orientation, Color color)
    {
       addMesh(MeshDataGenerator.Cylinder(radius, height, DEFAULT_RES), offset, orientation, color);
    }
@@ -356,7 +358,7 @@ public class JavaFXMultiColorMeshBuilder
     * @param color          color of the given mesh. Color accuracy depends on the color palette in
     *                       use.
     */
-   public void addMesh(MeshDataHolder meshDataHolder, Tuple3DReadOnly offset, AxisAngle orientation, Color color)
+   public void addMesh(MeshDataHolder meshDataHolder, Tuple3DReadOnly offset, Orientation3DReadOnly orientation, Color color)
    {
       meshBuilder.addMesh(setColor(meshDataHolder, color), offset, orientation);
    }
@@ -444,7 +446,7 @@ public class JavaFXMultiColorMeshBuilder
     * @param close            whether the end of the given array of points should be connected to the
     *                         beginning or not.
     */
-   public void addMultiLine(RigidBodyTransform transformToWorld, List<Point2D> points, double lineWidth, Color color, boolean close)
+   public void addMultiLine(RigidBodyTransformReadOnly transformToWorld, List<? extends Point2DReadOnly> points, double lineWidth, Color color, boolean close)
    {
       if (points.size() < 2)
          return;
@@ -454,8 +456,8 @@ public class JavaFXMultiColorMeshBuilder
 
       for (int i = 1; i < points.size(); i++)
       {
-         Point2D start2d = points.get(i - 1);
-         Point2D end2d = points.get(i);
+         Point2DReadOnly start2d = points.get(i - 1);
+         Point2DReadOnly end2d = points.get(i);
 
          start.set(start2d.getX(), start2d.getY(), 0.0);
          end.set(end2d.getX(), end2d.getY(), 0.0);
@@ -467,8 +469,8 @@ public class JavaFXMultiColorMeshBuilder
 
       if (close)
       {
-         Point2D start2d = points.get(points.size() - 1);
-         Point2D end2d = points.get(0);
+         Point2DReadOnly start2d = points.get(points.size() - 1);
+         Point2DReadOnly end2d = points.get(0);
 
          start.set(start2d.getX(), start2d.getY(), 0.0);
          end.set(end2d.getX(), end2d.getY(), 0.0);
@@ -491,7 +493,7 @@ public class JavaFXMultiColorMeshBuilder
     * @param close            whether the end of the given array of points should be connected to the
     *                         beginning or not.
     */
-   public void addMultiLine(RigidBodyTransform transformToWorld, Point2D[] points, double lineWidth, Color color, boolean close)
+   public void addMultiLine(RigidBodyTransformReadOnly transformToWorld, Point2DReadOnly[] points, double lineWidth, Color color, boolean close)
    {
       addMultiLine(transformToWorld, Arrays.asList(points), lineWidth, color, close);
    }
@@ -504,7 +506,7 @@ public class JavaFXMultiColorMeshBuilder
     * @param polygon          the polygon to render.
     * @param color            color of the polygon. Color accuracy depends on the color palette in use.
     */
-   public void addPolygon(RigidBodyTransform transformToWorld, ConvexPolygon2D polygon, Color color)
+   public void addPolygon(RigidBodyTransformReadOnly transformToWorld, ConvexPolygon2DReadOnly polygon, Color color)
    {
       addMesh(MeshDataGenerator.Polygon(transformToWorld, polygon), color);
    }
@@ -528,7 +530,7 @@ public class JavaFXMultiColorMeshBuilder
     * @param polygon the polygon 3D vertices.
     * @param color   color of the polygon. Color accuracy depends on the color palette in use.
     */
-   public void addPolygon(List<Point3D> polygon, Color color)
+   public void addPolygon(List<? extends Point3DReadOnly> polygon, Color color)
    {
       addMesh(MeshDataGenerator.Polygon(polygon), color);
    }
