@@ -1,6 +1,26 @@
 package us.ihmc.javaFXToolkit.graphics;
 
-import jassimp.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.HashSet;
+import java.util.List;
+
+import jassimp.AiBuiltInWrapperProvider;
+import jassimp.AiClassLoaderIOSystem;
+import jassimp.AiColor;
+import jassimp.AiMaterial;
+import jassimp.AiMatrix4f;
+import jassimp.AiMesh;
+import jassimp.AiMetadataEntry;
+import jassimp.AiNode;
+import jassimp.AiPostProcessSteps;
+import jassimp.AiScene;
+import jassimp.AiTextureType;
+import jassimp.IHMCJassimp;
+import jassimp.Jassimp;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Material;
@@ -13,14 +33,6 @@ import us.ihmc.euclid.tuple3D.Vector3D32;
 import us.ihmc.graphicsDescription.MeshDataHolder;
 import us.ihmc.graphicsDescription.TexCoord2f;
 import us.ihmc.javaFXToolkit.JavaFXTools;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.HashSet;
-import java.util.List;
 
 public class JAssImpJavaFXTools
 {

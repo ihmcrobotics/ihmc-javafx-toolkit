@@ -21,17 +21,21 @@ import us.ihmc.graphicsDescription.TexCoord2f;
 import us.ihmc.log.LogTools;
 
 /**
- * This class an automated interpretation of {@link MeshDataHolder} into JavaFX {@link TriangleMesh} usable via {@link MeshView}.
- * With this tool it is possible to tools from the Graphics3DDescription library such {@link MeshDataGenerator} and {@link MeshDataBuilder}.
- * It also provides a simple way to optimize meshes for JavaFX.
+ * This class an automated interpretation of {@link MeshDataHolder} into JavaFX {@link TriangleMesh}
+ * usable via {@link MeshView}. With this tool it is possible to tools from the
+ * Graphics3DDescription library such {@link MeshDataGenerator} and {@link MeshDataBuilder}. It also
+ * provides a simple way to optimize meshes for JavaFX.
+ * 
  * @author Sylvain Bertrand
  */
 public class JavaFXMeshDataInterpreter
 {
    /**
     * Translates a {@link MeshDataHolder} into {@link TriangleMesh}.
+    * 
     * @param meshData the mesh data to interpret. Not modified.
-    * @return the interpreted JavaFX {@link TriangleMesh}. Return {@code null} when the given mesh data is {@code null} or empty.
+    * @return the interpreted JavaFX {@link TriangleMesh}. Return {@code null} when the given mesh data
+    *         is {@code null} or empty.
     */
    public static TriangleMesh interpretMeshData(MeshDataHolder meshData)
    {
@@ -40,11 +44,15 @@ public class JavaFXMeshDataInterpreter
 
    /**
     * Translates a {@link MeshDataHolder} into {@link TriangleMesh}.
-    * @param meshData the mesh data to interpret. Not modified.
-    * @param optimizeMesh whether to optimize the mesh data or not.
-    * The optimization consists in removing duplicate vertices, texture coordinates, and vertex normals and recomputing triangle indices accordingly.
-    * This process can be computationally intensive but it is often highly beneficial especially for large meshes and does not need to be executed on the rendering thread.
-    * @return the interpreted JavaFX {@link TriangleMesh}. Return {@code null} when the given mesh data is {@code null} or empty.
+    * 
+    * @param meshData     the mesh data to interpret. Not modified.
+    * @param optimizeMesh whether to optimize the mesh data or not. The optimization consists in
+    *                     removing duplicate vertices, texture coordinates, and vertex normals and
+    *                     recomputing triangle indices accordingly. This process can be computationally
+    *                     intensive but it is often highly beneficial especially for large meshes and
+    *                     does not need to be executed on the rendering thread.
+    * @return the interpreted JavaFX {@link TriangleMesh}. Return {@code null} when the given mesh data
+    *         is {@code null} or empty.
     */
    public static TriangleMesh interpretMeshData(MeshDataHolder meshData, boolean optimizeMesh)
    {
@@ -128,7 +136,7 @@ public class JavaFXMeshDataInterpreter
       int index = 0;
       for (Tuple3DBasics tuple : tuple3fs)
       {
-         if(tuple == null)
+         if (tuple == null)
          {
             LogTools.error("Got Null, Something is funny here");
             array[index++] = Float.NaN;
@@ -151,7 +159,7 @@ public class JavaFXMeshDataInterpreter
       int index = 0;
       for (Tuple2DBasics tuple : tuple2fs)
       {
-         if(tuple == null)
+         if (tuple == null)
          {
             LogTools.error("Got Null, Something is funny here");
             array[index++] = Float.NaN;

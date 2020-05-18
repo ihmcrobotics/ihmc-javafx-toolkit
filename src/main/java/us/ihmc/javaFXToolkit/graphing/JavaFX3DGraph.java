@@ -6,13 +6,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Box;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.tuple3D.Point3D;
-import us.ihmc.yoVariables.dataBuffer.DataEntryHolder;
-import us.ihmc.yoVariables.dataBuffer.TimeDataHolder;
 import us.ihmc.graphicsDescription.graphInterfaces.GraphIndicesHolder;
 import us.ihmc.graphicsDescription.graphInterfaces.SelectedVariableHolder;
 import us.ihmc.javaFXToolkit.scenes.View3DFactory;
 import us.ihmc.javaFXToolkit.scenes.View3DFactory.SceneType;
 import us.ihmc.javaFXToolkit.text.Text3D;
+import us.ihmc.yoVariables.dataBuffer.DataEntryHolder;
+import us.ihmc.yoVariables.dataBuffer.TimeDataHolder;
 
 public class JavaFX3DGraph
 {
@@ -34,30 +34,30 @@ public class JavaFX3DGraph
       View3DFactory view3dFactory = new View3DFactory(-1, -1, true, SceneAntialiasing.BALANCED, SceneType.MAIN_SCENE);
       view3dFactory.addCameraController(0.0, 1e7, false);
       view3dFactory.setBackgroundColor(Color.LIGHTGRAY);
-      
+
       double infinity = 10000.0;
       double lineWidth = 0.005;
-      
-//      JavaFXMultiColorMeshBuilder meshBuilder = new JavaFXMultiColorMeshBuilder(new TextureColorAdaptivePalette(16));
-//      double start = lineWidth / 2.0;
-//      meshBuilder.addLine(-start, 0.0, 0.0, -infinity, 0.0, 0.0, lineWidth, Color.GRAY);
-//      meshBuilder.addLine(0.0, -start, 0.0, 0.0, -infinity, 0.0, lineWidth, Color.GRAY);
-//      meshBuilder.addLine(0.0, 0.0, -start, 0.0, 0.0, -infinity, lineWidth, Color.GRAY);
-//      meshBuilder.addLine(start, 0.0, 0.0, infinity, 0.0, 0.0, lineWidth, Color.hsb(Color.RED.getHue(), 1.0, 1.0));
-//      meshBuilder.addLine(0.0, start, 0.0, 0.0, infinity, 0.0, lineWidth, Color.hsb(Color.GREEN.getHue(), 1.0, 1.0));
-//      meshBuilder.addLine(0.0, 0.0, start, 0.0, 0.0, infinity, lineWidth, Color.hsb(Color.BLUE.getHue(), 1.0, 1.0));
-//      MeshView coordinateSystem = new MeshView(meshBuilder.generateMesh());
-//      coordinateSystem.setMaterial(meshBuilder.generateMaterial());
-//      coordinateSystem.setMouseTransparent(true);
-//      view3dFactory.addNodeToView(coordinateSystem);
-      
+
+      //      JavaFXMultiColorMeshBuilder meshBuilder = new JavaFXMultiColorMeshBuilder(new TextureColorAdaptivePalette(16));
+      //      double start = lineWidth / 2.0;
+      //      meshBuilder.addLine(-start, 0.0, 0.0, -infinity, 0.0, 0.0, lineWidth, Color.GRAY);
+      //      meshBuilder.addLine(0.0, -start, 0.0, 0.0, -infinity, 0.0, lineWidth, Color.GRAY);
+      //      meshBuilder.addLine(0.0, 0.0, -start, 0.0, 0.0, -infinity, lineWidth, Color.GRAY);
+      //      meshBuilder.addLine(start, 0.0, 0.0, infinity, 0.0, 0.0, lineWidth, Color.hsb(Color.RED.getHue(), 1.0, 1.0));
+      //      meshBuilder.addLine(0.0, start, 0.0, 0.0, infinity, 0.0, lineWidth, Color.hsb(Color.GREEN.getHue(), 1.0, 1.0));
+      //      meshBuilder.addLine(0.0, 0.0, start, 0.0, 0.0, infinity, lineWidth, Color.hsb(Color.BLUE.getHue(), 1.0, 1.0));
+      //      MeshView coordinateSystem = new MeshView(meshBuilder.generateMesh());
+      //      coordinateSystem.setMaterial(meshBuilder.generateMaterial());
+      //      coordinateSystem.setMouseTransparent(true);
+      //      view3dFactory.addNodeToView(coordinateSystem);
+
       Box box = new Box(lineWidth, lineWidth, infinity);
-//      box.set
+      //      box.set
       view3dFactory.addNodeToView(box);
-      
+
       double fontHeight = 0.1;
       double fontThickness = lineWidth;
-      
+
       Text3D xLabel = new Text3D("X");
       xLabel.setFontThickness(fontThickness);
       xLabel.setFontHeight(fontHeight);
@@ -65,7 +65,7 @@ public class JavaFX3DGraph
       xLabel.setOrientation(new AxisAngle(1.0, -1.0, 0.0, 180.0));
       xLabel.setPosition(new Point3D(1.0, -fontHeight / 2.0, 0.0));
       view3dFactory.addNodeToView(xLabel.getNode());
-      
+
       Text3D yLabel = new Text3D("Y");
       yLabel.setFontThickness(fontThickness);
       yLabel.setFontHeight(fontHeight);
@@ -73,7 +73,7 @@ public class JavaFX3DGraph
       yLabel.setOrientation(new AxisAngle(1.0, 0.0, 0.0, 180.0));
       yLabel.setPosition(new Point3D(fontHeight / 2.0, 1.0, 0.0));
       view3dFactory.addNodeToView(yLabel.getNode());
-      
+
       Text3D zLabel = new Text3D("Z");
       zLabel.setFontThickness(fontThickness);
       zLabel.setFontHeight(fontHeight);

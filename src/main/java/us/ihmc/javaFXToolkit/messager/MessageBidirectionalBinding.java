@@ -12,7 +12,6 @@ import us.ihmc.messager.TopicListener;
  * {@code Topic}.
  *
  * @author Sylvain Bertrand
- *
  * @param <M> the message data type.
  * @param <P> the property data type.
  */
@@ -27,7 +26,7 @@ public class MessageBidirectionalBinding<M, P> implements TopicListener<M>, Chan
     * Creates a binding with a property and a topic sharing the same data type.
     *
     * @param messagingAction the action to take when the property's value changes.
-    * @param property the property to bind.
+    * @param property        the property to bind.
     * @return the binding.
     */
    public static <T> MessageBidirectionalBinding<T, T> createSingleTypedBinding(MessagingAction<T> messagingAction, Property<T> property)
@@ -39,8 +38,8 @@ public class MessageBidirectionalBinding<M, P> implements TopicListener<M>, Chan
     * Creates a binding with a property and a topic with different data type.
     *
     * @param messagingAction the action to take when the property's value changes.
-    * @param property the property to bind.
-    * @param converter the protocol for converting data between the property and the topic.
+    * @param property        the property to bind.
+    * @param converter       the protocol for converting data between the property and the topic.
     * @return the binding.
     */
    public MessageBidirectionalBinding(MessagingAction<M> messagingAction, Property<P> property, PropertyToMessageTypeConverter<M, P> converter)
@@ -72,9 +71,8 @@ public class MessageBidirectionalBinding<M, P> implements TopicListener<M>, Chan
    /**
     * Interface used to implement the protocol for updating the topic when the property's value is
     * changing.
-    * 
-    * @author Sylvain Bertrand
     *
+    * @author Sylvain Bertrand
     * @param <T> the topic data type.
     */
    public static interface MessagingAction<T>
@@ -85,8 +83,8 @@ public class MessageBidirectionalBinding<M, P> implements TopicListener<M>, Chan
    /**
     * Allows to ensure compatibility between a message and a property with different types. For
     * instance, when the property uses {@link Double} and the message is supposed to be an
-    * {@link Integer}, a converter from {@link Double} to {@link Integer} can be implemented
-    * allowing to bind the property to the message's topic.
+    * {@link Integer}, a converter from {@link Double} to {@link Integer} can be implemented allowing
+    * to bind the property to the message's topic.
     *
     * @param <M> Type of the message.
     * @param <P> Type of the property.
@@ -94,8 +92,7 @@ public class MessageBidirectionalBinding<M, P> implements TopicListener<M>, Chan
    public static interface PropertyToMessageTypeConverter<M, P>
    {
       /**
-       * @param propertyValue the value coming from the property to be converted to the message
-       *           type.
+       * @param propertyValue the value coming from the property to be converted to the message type.
        * @return the corresponding value with the message's type.
        */
       public M convert(P propertyValue);

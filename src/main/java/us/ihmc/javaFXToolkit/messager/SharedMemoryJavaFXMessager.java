@@ -158,7 +158,7 @@ public class SharedMemoryJavaFXMessager extends SharedMemoryMessager implements 
 
       private boolean removeListener(TopicListener<?> listener)
       {
-         return listeners.remove((TopicListener<Object>) listener);
+         return listeners.remove(listener);
       }
 
       private void notifyListeners()

@@ -29,7 +29,7 @@ public class Text3D
 
       setFontHeight(1.0);
    }
-   
+
    public void setFontColor(Color color)
    {
       text3dMesh.setTextureModeNone(color);
@@ -38,18 +38,18 @@ public class Text3D
    public void setFontHeight(double fontHeight)
    {
       fontHeightDecoupled = fontHeight;
-      
+
       text3dMesh.setScaleX(fontHeightDecoupled / text3dMesh.getFontSize());
       text3dMesh.setScaleY(fontHeightDecoupled / text3dMesh.getFontSize());
       text3dMesh.setScaleZ(fontHeightDecoupled / text3dMesh.getFontSize());
 
       setFontThickness(fontThicknessDecoupled);
    }
-   
+
    public void setFontThickness(double fontThickness)
    {
       fontThicknessDecoupled = fontThickness;
-      
+
       text3dMesh.setHeight(fontThicknessDecoupled / (fontHeightDecoupled / text3dMesh.getFontSize()));
 
       setPosition(positionDecoupled);

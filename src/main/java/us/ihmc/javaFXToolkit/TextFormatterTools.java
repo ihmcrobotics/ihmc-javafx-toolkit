@@ -10,7 +10,7 @@ import javafx.util.converter.DefaultStringConverter;
 /**
  * This class provides simple tools for setting up JavaFX UI control text formatter such as
  * {@link TextField#setTextFormatter(TextFormatter)}.
- * 
+ *
  * @author Sylvain Bertrand
  */
 public class TextFormatterTools

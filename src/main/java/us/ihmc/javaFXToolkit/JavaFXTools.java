@@ -52,6 +52,7 @@ public abstract class JavaFXTools
    /**
     * @deprecated Use {@link #convertOrientation3DToAffine(Orientation3DReadOnly,Affine)} instead
     */
+   @Deprecated
    public static void convertAxisAngleToAffine(Orientation3DReadOnly orientation, Affine affineToPack)
    {
       convertOrientation3DToAffine(orientation, affineToPack);
@@ -65,6 +66,7 @@ public abstract class JavaFXTools
    /**
     * @deprecated Use {@link #createRigidBodyTransformToAffine(RigidBodyTransform)} instead
     */
+   @Deprecated
    public static Affine convertRigidBodyTransformToAffine(RigidBodyTransform rigidBodyTransform)
    {
       return createRigidBodyTransformToAffine(rigidBodyTransform);
@@ -147,6 +149,7 @@ public abstract class JavaFXTools
     *             {@link #createAffineFromOrientation3DAndTuple(Orientation3DReadOnly,Tuple3DReadOnly)}
     *             instead
     */
+   @Deprecated
    public static Affine createAffineFromQuaternionAndTuple(Orientation3DReadOnly orientation, Tuple3DReadOnly translation)
    {
       return createAffineFromOrientation3DAndTuple(orientation, translation);

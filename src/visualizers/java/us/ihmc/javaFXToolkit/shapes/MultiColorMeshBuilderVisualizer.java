@@ -17,7 +17,11 @@ import us.ihmc.javaFXToolkit.starter.ApplicationRunner;
 
 public class MultiColorMeshBuilderVisualizer
 {
-   private enum MeshToDisplay {BOX, LINE, MULTI_LINE}
+   private enum MeshToDisplay
+   {
+      BOX, LINE, MULTI_LINE
+   }
+
    private static final MeshToDisplay MESH_TO_DISPLAY = MeshToDisplay.BOX;
 
    private Random random = new Random(23423L);
@@ -32,21 +36,21 @@ public class MultiColorMeshBuilderVisualizer
 
       Color[] colors = {Color.RED, Color.YELLOW, Color.BEIGE, Color.CHOCOLATE, Color.ANTIQUEWHITE, Color.CYAN};
 
-//      TextureColorPalette colorPalette = new TextureColorAdaptivePalette();
-//      JavaFXMultiColorMeshBuilder meshBuilder = new JavaFXMultiColorMeshBuilder(colorPalette);
+      //      TextureColorPalette colorPalette = new TextureColorAdaptivePalette();
+      //      JavaFXMultiColorMeshBuilder meshBuilder = new JavaFXMultiColorMeshBuilder(colorPalette);
       JavaFXMultiColorMeshBuilder meshBuilder = new JavaFXMultiColorMeshBuilder(new TextureColorPalette2D());
 
       switch (MESH_TO_DISPLAY)
       {
-      case BOX:
-         view3dFactory.addNodesToView(addRandomBoxes(colors, meshBuilder));
-         break;
-      case LINE:
-         addLine(meshBuilder);
-      case MULTI_LINE:
-         addMultiLine(meshBuilder);
-      default:
-         break;
+         case BOX:
+            view3dFactory.addNodesToView(addRandomBoxes(colors, meshBuilder));
+            break;
+         case LINE:
+            addLine(meshBuilder);
+         case MULTI_LINE:
+            addMultiLine(meshBuilder);
+         default:
+            break;
       }
 
       MeshView meshView = new MeshView(meshBuilder.generateMesh());
@@ -94,8 +98,8 @@ public class MultiColorMeshBuilderVisualizer
          {
             for (float z = -0.0f; z <= 0.01f; z += 0.055f)
             {
-               Color color = colors[count%colors.length];
-//               Color color = Color.hsb(360.0 * random.nextDouble(), random.nextDouble(), random.nextDouble()); 
+               Color color = colors[count % colors.length];
+               //               Color color = Color.hsb(360.0 * random.nextDouble(), random.nextDouble(), random.nextDouble());
                Vector3D32 pointsOffset = new Vector3D32(x, y, 0 * RandomNumbers.nextFloat(random, -5.0f, 5.0f));
                meshBuilder.addCube(0.05f, pointsOffset, color);
                Box box = new Box(0.025f, 0.025f, 0.025f);

@@ -41,10 +41,10 @@ public class JavaFXHeatmapGraph
    private Group rootGroup;
    private final GraphIndicesHolder graphIndicesHolder;
    private final DataEntryHolder dataEntryHolder;
-   
+
    private final Point2D focusPoint;
    private final AffineTransform transformToCanvasSpace;
-   
+
    private TObjectIntHashMap<Point2D> heatmap;
 
    private YoDouble x;
@@ -60,7 +60,7 @@ public class JavaFXHeatmapGraph
    private Point2D gridCenter;
    private Point2D plotPencil;
    private Point2D viewRange;
-   
+
    private final java.awt.Color[] rainbow = Gradient.createRainbow(500);
 
    public JavaFXHeatmapGraph(YoVariableRegistry registry, GraphIndicesHolder graphIndicesHolder, SelectedVariableHolder selectedVariableHolder,
@@ -70,8 +70,8 @@ public class JavaFXHeatmapGraph
       this.graphIndicesHolder = graphIndicesHolder;
       this.dataEntryHolder = dataEntryHolder;
 
-      heatmap = new TObjectIntHashMap<Point2D>(dataBuffer.getTimeData().length);
-      
+      heatmap = new TObjectIntHashMap<>(dataBuffer.getTimeData().length);
+
       adjustingViewRangeMax = Optional.empty();
       adjustingViewRangeMin = Optional.empty();
 
@@ -133,9 +133,9 @@ public class JavaFXHeatmapGraph
             graphicsContext.strokeLine(gridCenter.getX(), 0.0, gridCenter.getX(), javaFXPanel.getHeight());
 
             plotXYHeatmap();
-            
+
             drawGridLines();
-            
+
             graphicsContext.setStroke(colors.getLabelColor());
             graphicsContext.strokeText(x.getName(), canvas.getWidth() / 2, canvas.getHeight() - 5);
             graphicsContext.rotate(-90.0);
@@ -147,38 +147,38 @@ public class JavaFXHeatmapGraph
          }
       });
    }
-   
+
    private void drawGridLines()
    {
-//      // change grid line scale from 1m to 10cm ehn below 10m
-//      Point2D gridSize = new Point2D();
-//      gridSize.set(calculateGridSizePixels(transformToCanvasSpace.getScaleX()), calculateGridSizePixels(transformToCanvasSpace.getScaleY()));
-//      
-//      upperLeftCorner.changeFrame(pixelsFrame);
-//      lowerRightCorner.changeFrame(pixelsFrame);
-//
-//      focusPoint.changeFrame(pixelsFrame);
-//      double gridStart = (Math.round(focusPoint.getX() / gridSize.getX()) - 20.0) * gridSize.getX();
-//      double gridEnd = (Math.round(focusPoint.getX() / gridSize.getX()) + 20.0) * gridSize.getX();
-//
-//      for (double gridX = gridStart; gridX < gridEnd; gridX += gridSize.getX())
-//      {
-//         gridLinePencil.setIncludingFrame(pixelsFrame, gridX, 0.0);
-//
-//         gridLinePencil.changeFrame(metersFrame);
-//         gridSize.changeFrame(metersFrame);
-//         int nthGridLineFromOrigin = (int) (Math.abs(gridLinePencil.getX()) / gridSize.getX());
-//         if (MathTools.epsilonEquals(Math.abs(gridLinePencil.getX()) % gridSize.getX(), gridSize.getX(), 1e-7))
-//         {
-//            nthGridLineFromOrigin++;
-//         }
-//         applyParametersForGridline(graphics2d, nthGridLineFromOrigin);
-//
-//         gridLinePencil.changeFrame(pixelsFrame);
-//         gridSize.changeFrame(pixelsFrame);
-//         tempGridLine.set(gridLinePencil.getX(), gridLinePencil.getY(), 0.0, 1.0);
-//         graphics2d.drawLine(pixelsFrame, tempGridLine);
-//      }
+      //      // change grid line scale from 1m to 10cm ehn below 10m
+      //      Point2D gridSize = new Point2D();
+      //      gridSize.set(calculateGridSizePixels(transformToCanvasSpace.getScaleX()), calculateGridSizePixels(transformToCanvasSpace.getScaleY()));
+      //      
+      //      upperLeftCorner.changeFrame(pixelsFrame);
+      //      lowerRightCorner.changeFrame(pixelsFrame);
+      //
+      //      focusPoint.changeFrame(pixelsFrame);
+      //      double gridStart = (Math.round(focusPoint.getX() / gridSize.getX()) - 20.0) * gridSize.getX();
+      //      double gridEnd = (Math.round(focusPoint.getX() / gridSize.getX()) + 20.0) * gridSize.getX();
+      //
+      //      for (double gridX = gridStart; gridX < gridEnd; gridX += gridSize.getX())
+      //      {
+      //         gridLinePencil.setIncludingFrame(pixelsFrame, gridX, 0.0);
+      //
+      //         gridLinePencil.changeFrame(metersFrame);
+      //         gridSize.changeFrame(metersFrame);
+      //         int nthGridLineFromOrigin = (int) (Math.abs(gridLinePencil.getX()) / gridSize.getX());
+      //         if (MathTools.epsilonEquals(Math.abs(gridLinePencil.getX()) % gridSize.getX(), gridSize.getX(), 1e-7))
+      //         {
+      //            nthGridLineFromOrigin++;
+      //         }
+      //         applyParametersForGridline(graphics2d, nthGridLineFromOrigin);
+      //
+      //         gridLinePencil.changeFrame(pixelsFrame);
+      //         gridSize.changeFrame(pixelsFrame);
+      //         tempGridLine.set(gridLinePencil.getX(), gridLinePencil.getY(), 0.0, 1.0);
+      //         graphics2d.drawLine(pixelsFrame, tempGridLine);
+      //      }
    }
 
    private double calculateGridSizePixels(double pixelsPerMeter)
@@ -189,10 +189,10 @@ public class JavaFXHeatmapGraph
       double orderOfMagnitude = Math.floor(decimalPlace);
       double nextOrderOfMagnitude = Math.pow(10, orderOfMagnitude + 1);
       double percentageToNextOrderOfMagnitude = desiredMeters / nextOrderOfMagnitude;
-      
+
       double remainder = percentageToNextOrderOfMagnitude % 0.5;
       double roundToNearestPoint5 = remainder >= 0.25 ? percentageToNextOrderOfMagnitude + (0.5 - remainder) : percentageToNextOrderOfMagnitude - remainder;
-      
+
       double gridSizeMeters;
       if (roundToNearestPoint5 > 0.0)
       {
@@ -203,7 +203,7 @@ public class JavaFXHeatmapGraph
          gridSizeMeters = Math.pow(10, orderOfMagnitude);
       }
       double gridSizePixels = gridSizeMeters * pixelsPerMeter;
-      
+
       return gridSizePixels;
    }
 
@@ -214,28 +214,28 @@ public class JavaFXHeatmapGraph
 
       double discreteX = 0.09;
       double discreteY = 0.3;
-      
+
       for (int i = graphIndicesHolder.getInPoint(); i < graphIndicesHolder.getIndex(); i++)
       {
          double roundedX = MathTools.roundToPrecision(xDataEntry.getData()[i], discreteX);
          double roundedY = MathTools.roundToPrecision(yDataEntry.getData()[i], discreteY);
-         
+
          plotPencil.set(roundedX, roundedY);
-         
+
          heatmap.adjustOrPutValue(plotPencil, 1, 1);
          int heat = heatmap.get(plotPencil);
-         
+
          adjustViewRange(plotPencil.getX(), plotPencil.getY());
-         
+
          transformToCanvasSpace.transform(plotPencil);
-         
+
          graphicsContext.setFill(getHeatColor(heat));
          fillRect(plotPencil.getX(), plotPencil.getY(), discreteX * transformToCanvasSpace.getScaleX(), discreteY * transformToCanvasSpace.getScaleY());
       }
-      
+
       heatmap.clear();
    }
-   
+
    private Color getHeatColor(int heat)
    {
       double maxHeat = 30.0;

@@ -27,12 +27,12 @@ public class JavaFXGraphics3DNode extends Group
       this.graphicsNode = graphicsNode;
 
       javaFXGraphicsObject = new JavaFXGraphicsObject(graphicsNode.getGraphics3DObject(), appearance);
-      this.getChildren().add(javaFXGraphicsObject.getGroup());
+      getChildren().add(javaFXGraphicsObject.getGroup());
    }
 
    public void update()
    {
-      ObservableList<Transform> transforms = this.getTransforms();
+      ObservableList<Transform> transforms = getTransforms();
       transforms.clear();
       Affine javaFxAffineTransform = new Affine();
 
@@ -48,7 +48,7 @@ public class JavaFXGraphics3DNode extends Group
 
    public void addChild(JavaFXGraphics3DNode child)
    {
-      this.getChildren().add(child);
+      getChildren().add(child);
       updatables.add(child);
    }
 }

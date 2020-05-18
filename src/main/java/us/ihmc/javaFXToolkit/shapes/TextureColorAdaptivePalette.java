@@ -16,17 +16,24 @@ import javafx.scene.paint.Color;
 import us.ihmc.log.LogTools;
 
 /**
- * Provides an color palette that expands as new colors are being accessed instead of being pre-generated as in {@link TextureColorPalette2D} and {@link TextureColorPalette1D}.
- * The main advantage over the other color palettes is the guarantee of an exact restitution of the colors.
- * However, the approximate number of colors that will be used needs to be known in advance as the color palette has a fixed size and only a certain number of colors can be registered.
- * By default, the image used by this color palette is automatically cleared every time {@link #getColorPalette()} is called.
- * This behavior can cause a noticeable slow down of the rendering thread when creating numerous {@link Image}s.
- * In such scenario, it is preferred to initialize {@link #autoClear} to false and to reuse as much as possible the same {@link Image}.
+ * Provides an color palette that expands as new colors are being accessed instead of being
+ * pre-generated as in {@link TextureColorPalette2D} and {@link TextureColorPalette1D}. The main
+ * advantage over the other color palettes is the guarantee of an exact restitution of the colors.
+ * However, the approximate number of colors that will be used needs to be known in advance as the
+ * color palette has a fixed size and only a certain number of colors can be registered. By default,
+ * the image used by this color palette is automatically cleared every time
+ * {@link #getColorPalette()} is called. This behavior can cause a noticeable slow down of the
+ * rendering thread when creating numerous {@link Image}s. In such scenario, it is preferred to
+ * initialize {@link #autoClear} to false and to reuse as much as possible the same {@link Image}.
+ * 
  * @author Sylvain Bertrand
  */
 public class TextureColorAdaptivePalette implements TextureColorPalette
 {
-   /** Debug variable. When set to true, the {@link Image} used in this color palette is printed as a png file.*/
+   /**
+    * Debug variable. When set to true, the {@link Image} used in this color palette is printed as a
+    * png file.
+    */
    private static final boolean PRINT_PALETTE = false;
    private static final int DEFAULT_PALETTE_SIZE = 1024;
 
@@ -39,7 +46,8 @@ public class TextureColorAdaptivePalette implements TextureColorPalette
    private final boolean autoClear;
 
    /**
-    * Creates a default color palette of size {@value #DEFAULT_PALETTE_SIZE} * {@value #DEFAULT_PALETTE_SIZE}.
+    * Creates a default color palette of size {@value #DEFAULT_PALETTE_SIZE} *
+    * {@value #DEFAULT_PALETTE_SIZE}.
     */
    public TextureColorAdaptivePalette()
    {
@@ -48,9 +56,13 @@ public class TextureColorAdaptivePalette implements TextureColorPalette
 
    /**
     * Creates a color palette of size {@value #DEFAULT_PALETTE_SIZE} * {@value #DEFAULT_PALETTE_SIZE}.
+    * 
     * @param autoClear defines how this palette should behave:
-    * <li> {@code true}: the {@link Image} used by this palette is automatically cleared when {@link #getColorPalette()} is called (this is preferred option in most situations),
-    * <li> {@code false}: the {@link Image} has to be cleared manually (this is preferred option when numerous images have to be created).
+    *                  <li>{@code true}: the {@link Image} used by this palette is automatically
+    *                  cleared when {@link #getColorPalette()} is called (this is preferred option in
+    *                  most situations),
+    *                  <li>{@code false}: the {@link Image} has to be cleared manually (this is
+    *                  preferred option when numerous images have to be created).
     */
    public TextureColorAdaptivePalette(boolean autoClear)
    {
@@ -59,20 +71,26 @@ public class TextureColorAdaptivePalette implements TextureColorPalette
 
    /**
     * Creates a color palette with the given size.
-    * @param paletteSize size of the palette, the number of different colors will be: {@code paletteSize * paletteSize}.
+    * 
+    * @param paletteSize size of the palette, the number of different colors will be:
+    *                    {@code paletteSize * paletteSize}.
     */
    public TextureColorAdaptivePalette(int paletteSize)
    {
       this(paletteSize, 1, true);
    }
 
-   
    /**
     * Creates a color palette.
-    * @param paletteSize size of the palette, the number of different colors will be: {@code paletteSize * paletteSize}.
-    * @param autoClear defines how this palette should behave:
-    * <li> {@code true}: the {@link Image} used by this palette is automatically cleared when {@link #getColorPalette()} is called (this is preferred option in most situations),
-    * <li> {@code false}: the {@link Image} has to be cleared manually (this is preferred option when numerous images have to be created).
+    * 
+    * @param paletteSize size of the palette, the number of different colors will be:
+    *                    {@code paletteSize * paletteSize}.
+    * @param autoClear   defines how this palette should behave:
+    *                    <li>{@code true}: the {@link Image} used by this palette is automatically
+    *                    cleared when {@link #getColorPalette()} is called (this is preferred option in
+    *                    most situations),
+    *                    <li>{@code false}: the {@link Image} has to be cleared manually (this is
+    *                    preferred option when numerous images have to be created).
     */
    public TextureColorAdaptivePalette(int paletteSize, boolean autoClear)
    {
@@ -80,13 +98,18 @@ public class TextureColorAdaptivePalette implements TextureColorPalette
    }
 
    /**
-    * 
     * Creates a color palette.
-    * @param paletteSize size of the palette, the number of different colors will be: {@code paletteSize * paletteSize}.
-    * @param colorPixelSize size of the color pixels in the image to be used. A size of {@code 1} seems to be working perfectly fine.
-    * @param autoClear defines how this palette should behave:
-    * <li> {@code true}: the {@link Image} used by this palette is automatically cleared when {@link #getColorPalette()} is called (this is preferred option in most situations),
-    * <li> {@code false}: the {@link Image} has to be cleared manually (this is preferred option when numerous images have to be created).
+    * 
+    * @param paletteSize    size of the palette, the number of different colors will be:
+    *                       {@code paletteSize * paletteSize}.
+    * @param colorPixelSize size of the color pixels in the image to be used. A size of {@code 1} seems
+    *                       to be working perfectly fine.
+    * @param autoClear      defines how this palette should behave:
+    *                       <li>{@code true}: the {@link Image} used by this palette is automatically
+    *                       cleared when {@link #getColorPalette()} is called (this is preferred option
+    *                       in most situations),
+    *                       <li>{@code false}: the {@link Image} has to be cleared manually (this is
+    *                       preferred option when numerous images have to be created).
     */
    public TextureColorAdaptivePalette(int paletteSize, int colorPixelSize, boolean autoClear)
    {
@@ -95,12 +118,12 @@ public class TextureColorAdaptivePalette implements TextureColorPalette
 
       this.autoClear = autoClear;
       this.paletteSize = paletteSize;
-      this.pixelSize = colorPixelSize;
+      pixelSize = colorPixelSize;
    }
 
    /**
-    * Clears the image currently in use by this color palette.
-    * Allows to empty the buffer in order to register new colors.
+    * Clears the image currently in use by this color palette. Allows to empty the buffer in order to
+    * register new colors.
     * <p>
     * Note that when {@link #autoClear} is set to true, the palette will automatically be cleared.
     * </p>
@@ -153,9 +176,9 @@ public class TextureColorAdaptivePalette implements TextureColorPalette
       int scaledWidth = (int) colorPalette.getWidth() / pixelSize;
       int scaledHeight = (int) colorPalette.getHeight() / pixelSize;
       float x = (float) (Math.floorMod(pixelIndex, scaledWidth)) / (float) scaledWidth;
-      x += 0.5f * (float) pixelSize / (float) colorPalette.getWidth();
+      x += 0.5f * pixelSize / (float) colorPalette.getWidth();
       float y = (float) (Math.floorDiv(pixelIndex, scaledWidth)) / (float) scaledHeight;
-      y += 0.5f * (float) pixelSize / (float) colorPalette.getHeight();
+      y += 0.5f * pixelSize / (float) colorPalette.getHeight();
       return new float[] {x, y};
    }
 
