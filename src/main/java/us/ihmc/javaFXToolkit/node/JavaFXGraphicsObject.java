@@ -2,7 +2,7 @@ package us.ihmc.javaFXToolkit.node;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
+import java.util.List;
 
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
@@ -14,7 +14,7 @@ import javafx.scene.transform.Affine;
 import javafx.scene.transform.MatrixType;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
-import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.graphicsDescription.Graphics3DObject;
 import us.ihmc.graphicsDescription.MeshDataGenerator;
@@ -62,7 +62,7 @@ public class JavaFXGraphicsObject extends Graphics3DInstructionExecutor
    {
       if (graphics3dObject != null)
       {
-         ArrayList<Graphics3DPrimitiveInstruction> graphics3dInstructions = graphics3dObject.getGraphics3DInstructions();
+         List<Graphics3DPrimitiveInstruction> graphics3dInstructions = graphics3dObject.getGraphics3DInstructions();
          if (graphics3dInstructions != null)
          {
             for (Graphics3DPrimitiveInstruction instruction : graphics3dInstructions)
@@ -142,7 +142,7 @@ public class JavaFXGraphicsObject extends Graphics3DInstructionExecutor
    @Override
    protected void doRotateInstruction(Graphics3DRotateInstruction rot)
    {
-      RotationMatrix mat = rot.getRotationMatrix();
+      RotationMatrixReadOnly mat = rot.getRotationMatrix();
       Affine outputRotation = new Affine(new double[] {mat.getM00(), mat.getM01(), mat.getM02(), 0, mat.getM10(), mat.getM11(), mat.getM12(), 0, mat.getM20(),
             mat.getM21(), mat.getM22(), 0, 0, 0, 0, 1}, MatrixType.MT_3D_4x4, 0);
 

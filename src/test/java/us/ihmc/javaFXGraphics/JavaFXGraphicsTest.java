@@ -2,7 +2,9 @@ package us.ihmc.javaFXGraphics;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.ArrayList;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.List;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -33,7 +35,7 @@ public class JavaFXGraphicsTest
 
       JavaFXGraphicsObject javaFXGraphics = new JavaFXGraphicsObject(cubeGraphics, desiredAppearance);
 
-      ArrayList<Graphics3DPrimitiveInstruction> graphics3dInstructions = cubeGraphics.getGraphics3DInstructions();
+      List<Graphics3DPrimitiveInstruction> graphics3dInstructions = cubeGraphics.getGraphics3DInstructions();
       for (Graphics3DPrimitiveInstruction primitive : graphics3dInstructions)
       {
          if (primitive instanceof Graphics3DInstruction)
