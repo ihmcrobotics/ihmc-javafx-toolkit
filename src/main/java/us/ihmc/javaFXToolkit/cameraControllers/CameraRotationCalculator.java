@@ -21,8 +21,9 @@ import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.tools.EuclidCoreTools;
 import us.ihmc.euclid.tuple2D.Point2D;
 import us.ihmc.euclid.tuple2D.Vector2D;
-import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.javaFXToolkit.JavaFXTools;
 
 /**
@@ -124,7 +125,7 @@ public class CameraRotationCalculator
     * @param forward indicates which is forward.
     * @throws RuntimeException if {@code up} and {@code forward} are not orthogonal.
     */
-   public CameraRotationCalculator(Vector3D up, Vector3D forward)
+   public CameraRotationCalculator(Vector3DReadOnly up, Vector3DReadOnly forward)
    {
       Vector3D left = new Vector3D();
       left.cross(up, forward);
@@ -248,7 +249,7 @@ public class CameraRotationCalculator
     * @param focusPoint     desired focus position. Not modified.
     * @param cameraRoll     desired camera roll.
     */
-   public void setRotationFromCameraAndFocusPositions(Point3D cameraPosition, Point3D focusPoint, double cameraRoll)
+   public void setRotationFromCameraAndFocusPositions(Point3DReadOnly cameraPosition, Point3DReadOnly focusPoint, double cameraRoll)
    {
       Vector3D fromFocusToCamera = new Vector3D();
       fromFocusToCamera.sub(cameraPosition, focusPoint);

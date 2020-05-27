@@ -37,12 +37,12 @@ public class MeshDataGeneratorVisualizer
       cylinder.setMaterial(defaultMaterial);
       cylinder.setTranslateY(0.5);
       view3dFactory.addNodeToView(cylinder);
-      
+
       MeshView cone = new MeshView(JavaFXMeshDataInterpreter.interpretMeshData(MeshDataGenerator.Cone(0.3, 0.1, 64)));
       cone.setMaterial(defaultMaterial);
       cone.setTranslateY(-0.3);
       view3dFactory.addNodeToView(cone);
-      
+
       MeshView sphere = new MeshView(JavaFXMeshDataInterpreter.interpretMeshData(MeshDataGenerator.Ellipsoid(0.3, 0.1, 0.4, 64, 64)));
       sphere.setMaterial(defaultMaterial);
       sphere.setTranslateX(0.5);
@@ -74,7 +74,7 @@ public class MeshDataGeneratorVisualizer
       view3dFactory.addNodeToView(hemiEllipsoid);
 
       MeshView polygon = new MeshView(JavaFXMeshDataInterpreter.interpretMeshData(MeshDataGenerator.Polygon(polygonVertices)));
-//      polygon.setDrawMode(DrawMode.LINE);
+      //      polygon.setDrawMode(DrawMode.LINE);
       polygon.setMaterial(defaultMaterial);
       polygon.setTranslateX(-0.5);
       polygon.setTranslateY(3.5);
@@ -103,7 +103,7 @@ public class MeshDataGeneratorVisualizer
       line.setTranslateX(-0.5);
       line.setTranslateY(1.0);
       view3dFactory.addNodeToView(line);
-      
+
       MeshView capsule = new MeshView(JavaFXMeshDataInterpreter.interpretMeshData(MeshDataGenerator.Capsule(0.3, 0.1, 0.05, 0.15, 16, 16)));
       capsule.setMaterial(defaultMaterial);
       capsule.setTranslateX(0.0);

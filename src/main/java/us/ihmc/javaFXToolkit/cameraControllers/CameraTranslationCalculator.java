@@ -18,6 +18,7 @@ import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import us.ihmc.euclid.matrix.RotationMatrix;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
 import us.ihmc.javaFXToolkit.JavaFXTools;
 
 /**
@@ -93,7 +94,7 @@ public class CameraTranslationCalculator
     *
     * @param up indicates which way is up.
     */
-   public CameraTranslationCalculator(Vector3D up)
+   public CameraTranslationCalculator(Vector3DReadOnly up)
    {
       down.setAndNegate(up);
    }
@@ -162,7 +163,7 @@ public class CameraTranslationCalculator
     *
     * @param translationOffset the translation offset in local frame to apply. Not modified.
     */
-   public void updateObserverTranslation(Vector3D translationOffset)
+   public void updateObserverTranslation(Vector3DReadOnly translationOffset)
    {
       updateObserverTranslation(translationOffset.getX(), translationOffset.getY(), translationOffset.getZ());
    }

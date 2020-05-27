@@ -8,14 +8,15 @@ import javafx.scene.transform.Translate;
 import us.ihmc.euclid.axisAngle.AxisAngle;
 import us.ihmc.euclid.axisAngle.interfaces.AxisAngleReadOnly;
 import us.ihmc.euclid.matrix.RotationMatrix;
+import us.ihmc.euclid.matrix.interfaces.RotationMatrixBasics;
 import us.ihmc.euclid.matrix.interfaces.RotationMatrixReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.transform.RigidBodyTransform;
-import us.ihmc.euclid.tuple3D.Point3D;
-import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
+import us.ihmc.euclid.tuple3D.interfaces.Vector3DBasics;
 
 public abstract class JavaFXTools
 {
@@ -52,6 +53,7 @@ public abstract class JavaFXTools
    /**
     * @deprecated Use {@link #convertOrientation3DToAffine(Orientation3DReadOnly,Affine)} instead
     */
+   @Deprecated
    public static void convertAxisAngleToAffine(Orientation3DReadOnly orientation, Affine affineToPack)
    {
       convertOrientation3DToAffine(orientation, affineToPack);
@@ -65,6 +67,7 @@ public abstract class JavaFXTools
    /**
     * @deprecated Use {@link #createRigidBodyTransformToAffine(RigidBodyTransform)} instead
     */
+   @Deprecated
    public static Affine convertRigidBodyTransformToAffine(RigidBodyTransform rigidBodyTransform)
    {
       return createRigidBodyTransformToAffine(rigidBodyTransform);
@@ -104,7 +107,7 @@ public abstract class JavaFXTools
       rotateToPack.setAxis(new javafx.geometry.Point3D(axisAngle.getX(), axisAngle.getY(), axisAngle.getZ()));
    }
 
-   public static void convertTransformToRotationMatrix(Transform transform, RotationMatrix rotationToPack)
+   public static void convertTransformToRotationMatrix(Transform transform, RotationMatrixBasics rotationToPack)
    {
       rotationToPack.set(transform.getMxx(),
                          transform.getMxy(),
@@ -147,6 +150,7 @@ public abstract class JavaFXTools
     *             {@link #createAffineFromOrientation3DAndTuple(Orientation3DReadOnly,Tuple3DReadOnly)}
     *             instead
     */
+   @Deprecated
    public static Affine createAffineFromQuaternionAndTuple(Orientation3DReadOnly orientation, Tuple3DReadOnly translation)
    {
       return createAffineFromOrientation3DAndTuple(orientation, translation);
@@ -164,19 +168,19 @@ public abstract class JavaFXTools
       return affine;
    }
 
-   public static void applyTranform(Transform transform, Vector3D vectorToTransform)
+   public static void applyTranform(Transform transform, Vector3DBasics vectorToTransform)
    {
       javafx.geometry.Point3D temporaryVector = transform.deltaTransform(vectorToTransform.getX(), vectorToTransform.getY(), vectorToTransform.getZ());
       vectorToTransform.set(temporaryVector.getX(), temporaryVector.getY(), temporaryVector.getZ());
    }
 
-   public static void applyTranform(Transform transform, Point3D pointToTransform)
+   public static void applyTranform(Transform transform, Point3DBasics pointToTransform)
    {
       javafx.geometry.Point3D temporaryVector = transform.transform(pointToTransform.getX(), pointToTransform.getY(), pointToTransform.getZ());
       pointToTransform.set(temporaryVector.getX(), temporaryVector.getY(), temporaryVector.getZ());
    }
 
-   public static void applyInvertTranform(Transform transform, Vector3D vectorToTransform)
+   public static void applyInvertTranform(Transform transform, Vector3DBasics vectorToTransform)
    {
       javafx.geometry.Point3D temporaryVector = new javafx.geometry.Point3D(vectorToTransform.getX(), vectorToTransform.getY(), vectorToTransform.getZ());
       try

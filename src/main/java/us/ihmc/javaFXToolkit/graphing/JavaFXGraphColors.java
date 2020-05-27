@@ -3,8 +3,9 @@ package us.ihmc.javaFXToolkit.graphing;
 import javafx.scene.paint.Color;
 
 /**
- * Future improvements should be influenced by http://www.kennethmoreland.com/color-maps/ColorMapsExpanded.pdf
- * 
+ * Future improvements should be influenced by
+ * http://www.kennethmoreland.com/color-maps/ColorMapsExpanded.pdf
+ *
  * @author Duncan Calvert (dcalvert@ihmc.us)
  */
 public class JavaFXGraphColors
@@ -16,12 +17,12 @@ public class JavaFXGraphColors
    private Color gridEveryFiveColor;
    private Color gridEveryTenColor;
    private Color selectionColor;
-   
+
    private JavaFXGraphColors()
    {
       // Disallow public construction
    }
-   
+
    public static JavaFXGraphColors simulationConstructionSetStyle()
    {
       JavaFXGraphColors simulationConstructionSetStyle = new JavaFXGraphColors();
@@ -34,7 +35,7 @@ public class JavaFXGraphColors
       simulationConstructionSetStyle.setSelectionColor(Color.RED);
       return simulationConstructionSetStyle;
    }
-   
+
    public static JavaFXGraphColors javaFXStyle()
    {
       JavaFXGraphColors simulationConstructionSetStyle = new JavaFXGraphColors();
