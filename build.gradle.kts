@@ -31,7 +31,7 @@ mainDependencies {
       exclude(group = "org.slf4j", module = "slf4j-simple")
    }
 
-   api("us.ihmc:euclid:0.14.2-ejml-0.39-beta-1")
+   api("us.ihmc:euclid:0.15.0")
    api("us.ihmc:ihmc-yovariables:0.7.0-ejml-0.39-beta-1")
    api("us.ihmc:ihmc-messager:0.1.4")
    api("us.ihmc:ihmc-graphics-description:0.17.0-ejml-0.39-beta-1")
