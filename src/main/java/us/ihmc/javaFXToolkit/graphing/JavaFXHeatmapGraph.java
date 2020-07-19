@@ -32,7 +32,7 @@ import us.ihmc.javaFXToolkit.JavaFXTools;
 import us.ihmc.yoVariables.dataBuffer.DataEntry;
 import us.ihmc.yoVariables.dataBuffer.DataEntryHolder;
 import us.ihmc.yoVariables.dataBuffer.TimeDataHolder;
-import us.ihmc.yoVariables.registry.YoVariableRegistry;
+import us.ihmc.yoVariables.registry.YoRegistry;
 import us.ihmc.yoVariables.variable.YoDouble;
 
 public class JavaFXHeatmapGraph
@@ -63,7 +63,7 @@ public class JavaFXHeatmapGraph
 
    private final java.awt.Color[] rainbow = Gradient.createRainbow(500);
 
-   public JavaFXHeatmapGraph(YoVariableRegistry registry, GraphIndicesHolder graphIndicesHolder, SelectedVariableHolder selectedVariableHolder,
+   public JavaFXHeatmapGraph(YoRegistry registry, GraphIndicesHolder graphIndicesHolder, SelectedVariableHolder selectedVariableHolder,
                              DataEntryHolder dataEntryHolder, TimeDataHolder dataBuffer)
    {
       javaFXPanel = new JFXPanel();
