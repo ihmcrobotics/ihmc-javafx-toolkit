@@ -217,8 +217,8 @@ public class JavaFXHeatmapGraph
 
       for (int i = graphIndicesHolder.getInPoint(); i < graphIndicesHolder.getIndex(); i++)
       {
-         double roundedX = MathTools.roundToPrecision(xDataEntry.getData()[i], discreteX);
-         double roundedY = MathTools.roundToPrecision(yDataEntry.getData()[i], discreteY);
+         double roundedX = MathTools.roundToPrecision(xDataEntry.getBuffer()[i], discreteX);
+         double roundedY = MathTools.roundToPrecision(yDataEntry.getBuffer()[i], discreteY);
 
          plotPencil.set(roundedX, roundedY);
 
