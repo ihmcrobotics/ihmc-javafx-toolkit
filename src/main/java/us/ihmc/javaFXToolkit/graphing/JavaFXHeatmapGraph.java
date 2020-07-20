@@ -31,7 +31,7 @@ import us.ihmc.graphicsDescription.graphInterfaces.SelectedVariableHolder;
 import us.ihmc.javaFXToolkit.JavaFXTools;
 import us.ihmc.yoVariables.dataBuffer.YoBufferVariableEntryReader;
 import us.ihmc.yoVariables.dataBuffer.YoBufferVariableEntryHolder;
-import us.ihmc.yoVariables.dataBuffer.TimeDataHolder;
+import us.ihmc.yoVariables.dataBuffer.YoTimeBufferHolder;
 import us.ihmc.yoVariables.registry.YoRegistry;
 import us.ihmc.yoVariables.variable.YoDouble;
 
@@ -64,13 +64,13 @@ public class JavaFXHeatmapGraph
    private final java.awt.Color[] rainbow = Gradient.createRainbow(500);
 
    public JavaFXHeatmapGraph(YoRegistry registry, GraphIndicesHolder graphIndicesHolder, SelectedVariableHolder selectedVariableHolder,
-                             YoBufferVariableEntryHolder dataEntryHolder, TimeDataHolder dataBuffer)
+                             YoBufferVariableEntryHolder dataEntryHolder, YoTimeBufferHolder dataBuffer)
    {
       javaFXPanel = new JFXPanel();
       this.graphIndicesHolder = graphIndicesHolder;
       this.dataEntryHolder = dataEntryHolder;
 
-      heatmap = new TObjectIntHashMap<>(dataBuffer.getTimeData().length);
+      heatmap = new TObjectIntHashMap<>(dataBuffer.getTimeBuffer().length);
 
       adjustingViewRangeMax = Optional.empty();
       adjustingViewRangeMin = Optional.empty();

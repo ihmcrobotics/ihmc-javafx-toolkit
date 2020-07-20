@@ -12,7 +12,7 @@ import us.ihmc.javaFXToolkit.scenes.View3DFactory;
 import us.ihmc.javaFXToolkit.scenes.View3DFactory.SceneType;
 import us.ihmc.javaFXToolkit.text.Text3D;
 import us.ihmc.yoVariables.dataBuffer.YoBufferVariableEntryHolder;
-import us.ihmc.yoVariables.dataBuffer.TimeDataHolder;
+import us.ihmc.yoVariables.dataBuffer.YoTimeBufferHolder;
 
 public class JavaFX3DGraph
 {
@@ -20,10 +20,10 @@ public class JavaFX3DGraph
    private final GraphIndicesHolder graphIndicesHolder;
    private final SelectedVariableHolder selectedVariableHolder;
    private final YoBufferVariableEntryHolder dataEntryHolder;
-   private final TimeDataHolder timeDataHolder;
+   private final YoTimeBufferHolder timeDataHolder;
 
    public JavaFX3DGraph(GraphIndicesHolder graphIndicesHolder, SelectedVariableHolder selectedVariableHolder, YoBufferVariableEntryHolder dataEntryHolder,
-                        TimeDataHolder timeDataHolder)
+                        YoTimeBufferHolder timeDataHolder)
    {
       javaFXPanel = new JFXPanel();
       this.graphIndicesHolder = graphIndicesHolder;
