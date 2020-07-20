@@ -11,7 +11,7 @@ import us.ihmc.graphicsDescription.graphInterfaces.SelectedVariableHolder;
 import us.ihmc.javaFXToolkit.scenes.View3DFactory;
 import us.ihmc.javaFXToolkit.scenes.View3DFactory.SceneType;
 import us.ihmc.javaFXToolkit.text.Text3D;
-import us.ihmc.yoVariables.dataBuffer.DataEntryHolder;
+import us.ihmc.yoVariables.dataBuffer.YoBufferVariableEntryHolder;
 import us.ihmc.yoVariables.dataBuffer.TimeDataHolder;
 
 public class JavaFX3DGraph
@@ -19,10 +19,10 @@ public class JavaFX3DGraph
    private final JFXPanel javaFXPanel;
    private final GraphIndicesHolder graphIndicesHolder;
    private final SelectedVariableHolder selectedVariableHolder;
-   private final DataEntryHolder dataEntryHolder;
+   private final YoBufferVariableEntryHolder dataEntryHolder;
    private final TimeDataHolder timeDataHolder;
 
-   public JavaFX3DGraph(GraphIndicesHolder graphIndicesHolder, SelectedVariableHolder selectedVariableHolder, DataEntryHolder dataEntryHolder,
+   public JavaFX3DGraph(GraphIndicesHolder graphIndicesHolder, SelectedVariableHolder selectedVariableHolder, YoBufferVariableEntryHolder dataEntryHolder,
                         TimeDataHolder timeDataHolder)
    {
       javaFXPanel = new JFXPanel();
