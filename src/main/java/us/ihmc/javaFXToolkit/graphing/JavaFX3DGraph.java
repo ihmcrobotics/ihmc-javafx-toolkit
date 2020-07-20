@@ -11,8 +11,8 @@ import us.ihmc.graphicsDescription.graphInterfaces.SelectedVariableHolder;
 import us.ihmc.javaFXToolkit.scenes.View3DFactory;
 import us.ihmc.javaFXToolkit.scenes.View3DFactory.SceneType;
 import us.ihmc.javaFXToolkit.text.Text3D;
-import us.ihmc.yoVariables.dataBuffer.YoBufferVariableEntryHolder;
-import us.ihmc.yoVariables.dataBuffer.YoTimeBufferHolder;
+import us.ihmc.yoVariables.buffer.interfaces.YoBufferVariableEntryHolder;
+import us.ihmc.yoVariables.buffer.interfaces.YoTimeBufferHolder;
 
 public class JavaFX3DGraph
 {

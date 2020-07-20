@@ -29,9 +29,9 @@ import us.ihmc.graphicsDescription.color.Gradient;
 import us.ihmc.graphicsDescription.graphInterfaces.GraphIndicesHolder;
 import us.ihmc.graphicsDescription.graphInterfaces.SelectedVariableHolder;
 import us.ihmc.javaFXToolkit.JavaFXTools;
-import us.ihmc.yoVariables.dataBuffer.YoBufferVariableEntryReader;
-import us.ihmc.yoVariables.dataBuffer.YoBufferVariableEntryHolder;
-import us.ihmc.yoVariables.dataBuffer.YoTimeBufferHolder;
+import us.ihmc.yoVariables.buffer.interfaces.YoBufferVariableEntryHolder;
+import us.ihmc.yoVariables.buffer.interfaces.YoBufferVariableEntryReader;
+import us.ihmc.yoVariables.buffer.interfaces.YoTimeBufferHolder;
 import us.ihmc.yoVariables.registry.YoRegistry;
 import us.ihmc.yoVariables.variable.YoDouble;
 
