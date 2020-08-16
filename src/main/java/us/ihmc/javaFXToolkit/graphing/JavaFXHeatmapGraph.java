@@ -29,10 +29,10 @@ import us.ihmc.graphicsDescription.color.Gradient;
 import us.ihmc.graphicsDescription.graphInterfaces.GraphIndicesHolder;
 import us.ihmc.graphicsDescription.graphInterfaces.SelectedVariableHolder;
 import us.ihmc.javaFXToolkit.JavaFXTools;
-import us.ihmc.yoVariables.dataBuffer.DataEntry;
-import us.ihmc.yoVariables.dataBuffer.DataEntryHolder;
-import us.ihmc.yoVariables.dataBuffer.TimeDataHolder;
-import us.ihmc.yoVariables.registry.YoVariableRegistry;
+import us.ihmc.yoVariables.buffer.interfaces.YoBufferVariableEntryHolder;
+import us.ihmc.yoVariables.buffer.interfaces.YoBufferVariableEntryReader;
+import us.ihmc.yoVariables.buffer.interfaces.YoTimeBufferHolder;
+import us.ihmc.yoVariables.registry.YoRegistry;
 import us.ihmc.yoVariables.variable.YoDouble;
 
 public class JavaFXHeatmapGraph
@@ -40,7 +40,7 @@ public class JavaFXHeatmapGraph
    private final JFXPanel javaFXPanel;
    private Group rootGroup;
    private final GraphIndicesHolder graphIndicesHolder;
-   private final DataEntryHolder dataEntryHolder;
+   private final YoBufferVariableEntryHolder dataEntryHolder;
 
    private final Point2D focusPoint;
    private final AffineTransform transformToCanvasSpace;
@@ -63,14 +63,14 @@ public class JavaFXHeatmapGraph
 
    private final java.awt.Color[] rainbow = Gradient.createRainbow(500);
 
-   public JavaFXHeatmapGraph(YoVariableRegistry registry, GraphIndicesHolder graphIndicesHolder, SelectedVariableHolder selectedVariableHolder,
-                             DataEntryHolder dataEntryHolder, TimeDataHolder dataBuffer)
+   public JavaFXHeatmapGraph(YoRegistry registry, GraphIndicesHolder graphIndicesHolder, SelectedVariableHolder selectedVariableHolder,
+                             YoBufferVariableEntryHolder dataEntryHolder, YoTimeBufferHolder dataBuffer)
    {
       javaFXPanel = new JFXPanel();
       this.graphIndicesHolder = graphIndicesHolder;
       this.dataEntryHolder = dataEntryHolder;
 
-      heatmap = new TObjectIntHashMap<>(dataBuffer.getTimeData().length);
+      heatmap = new TObjectIntHashMap<>(dataBuffer.getTimeBuffer().length);
 
       adjustingViewRangeMax = Optional.empty();
       adjustingViewRangeMin = Optional.empty();
@@ -209,16 +209,16 @@ public class JavaFXHeatmapGraph
 
    private void plotXYHeatmap()
    {
-      DataEntry xDataEntry = dataEntryHolder.getEntry(x);
-      DataEntry yDataEntry = dataEntryHolder.getEntry(y);
+      YoBufferVariableEntryReader xDataEntry = dataEntryHolder.getEntry(x);
+      YoBufferVariableEntryReader yDataEntry = dataEntryHolder.getEntry(y);
 
       double discreteX = 0.09;
       double discreteY = 0.3;
 
       for (int i = graphIndicesHolder.getInPoint(); i < graphIndicesHolder.getIndex(); i++)
       {
-         double roundedX = MathTools.roundToPrecision(xDataEntry.getData()[i], discreteX);
-         double roundedY = MathTools.roundToPrecision(yDataEntry.getData()[i], discreteY);
+         double roundedX = MathTools.roundToPrecision(xDataEntry.getBuffer()[i], discreteX);
+         double roundedY = MathTools.roundToPrecision(yDataEntry.getBuffer()[i], discreteY);
 
          plotPencil.set(roundedX, roundedY);
 
