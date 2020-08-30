@@ -15,9 +15,9 @@ import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple3D.Point3D32;
 import us.ihmc.euclid.tuple3D.Vector3D32;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
-import us.ihmc.graphicsDescription.MeshDataBuilder;
-import us.ihmc.graphicsDescription.MeshDataGenerator;
-import us.ihmc.graphicsDescription.MeshDataHolder;
+import us.ihmc.graphicsDescription.mesh.MeshDataBuilder;
+import us.ihmc.graphicsDescription.mesh.MeshDataGenerator;
+import us.ihmc.graphicsDescription.mesh.MeshDataHolder;
 import us.ihmc.log.LogTools;
 
 /**

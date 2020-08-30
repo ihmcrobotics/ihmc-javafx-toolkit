@@ -31,7 +31,7 @@ import us.ihmc.euclid.transform.AffineTransform;
 import us.ihmc.euclid.tuple2D.Point2D32;
 import us.ihmc.euclid.tuple3D.Point3D32;
 import us.ihmc.euclid.tuple3D.Vector3D32;
-import us.ihmc.graphicsDescription.MeshDataHolder;
+import us.ihmc.graphicsDescription.mesh.MeshDataHolder;
 import us.ihmc.javaFXToolkit.JavaFXTools;
 
 public class JAssImpJavaFXTools

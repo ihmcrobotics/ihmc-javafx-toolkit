@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import us.ihmc.commons.RandomNumbers;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D32;
-import us.ihmc.graphicsDescription.MeshDataGenerator;
+import us.ihmc.graphicsDescription.mesh.MeshDataGenerator;
 import us.ihmc.javaFXToolkit.scenes.View3DFactory;
 import us.ihmc.javaFXToolkit.starter.ApplicationRunner;
 

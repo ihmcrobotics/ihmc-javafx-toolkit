@@ -19,8 +19,8 @@ import us.ihmc.euclid.tuple3D.Point3D32;
 import us.ihmc.euclid.tuple3D.Vector3D32;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
-import us.ihmc.graphicsDescription.MeshDataGenerator;
-import us.ihmc.graphicsDescription.MeshDataHolder;
+import us.ihmc.graphicsDescription.mesh.MeshDataGenerator;
+import us.ihmc.graphicsDescription.mesh.MeshDataHolder;
 
 /**
  * Based on a {@link JavaFXMeshBuilder}, this class can combine different meshes with different

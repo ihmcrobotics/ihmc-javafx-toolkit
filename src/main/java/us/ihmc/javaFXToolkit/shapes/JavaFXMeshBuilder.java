@@ -1,7 +1,7 @@
 package us.ihmc.javaFXToolkit.shapes;
 
 import javafx.scene.shape.Mesh;
-import us.ihmc.graphicsDescription.MeshDataBuilder;
+import us.ihmc.graphicsDescription.mesh.MeshDataBuilder;
 import us.ihmc.javaFXToolkit.graphics.JavaFXMeshDataInterpreter;
 
 /**
