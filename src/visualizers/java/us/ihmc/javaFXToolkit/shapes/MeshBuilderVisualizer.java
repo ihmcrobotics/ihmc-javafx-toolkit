@@ -93,7 +93,7 @@ public class MeshBuilderVisualizer
       double radius = 0.1;
       meshBuilder.addCylinder(height, radius, cylinderPosition);
       //      meshBuilder.addMesh(MeshDataGenerator.ArcTorus(0.0, 2.0 * Math.PI, 0.3, 0.01, 128));
-      meshBuilder.addMesh(MeshDataGenerator.Cylinder(radius, height, 64));
+      meshBuilder.addMesh(MeshDataGenerator.Cylinder(radius, height, 64, false));
    }
 
    private void addCones(JavaFXMeshBuilder meshBuilder)

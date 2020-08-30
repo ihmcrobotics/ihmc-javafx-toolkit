@@ -214,8 +214,7 @@ public class JavaFXGraphicsObject extends Graphics3DInstructionExecutor
          MeshDataHolder meshData = MeshDataGenerator.Cube(cubeInstruction.getLength(),
                                                           cubeInstruction.getWidth(),
                                                           cubeInstruction.getHeight(),
-                                                          cubeInstruction.getCenteredInTheCenter(),
-                                                          cubeInstruction.getTextureFaces());
+                                                          cubeInstruction.getCenteredInTheCenter());
          Graphics3DAddMeshDataInstruction meshDataInstruction = Graphics3DObject.createMeshDataInstruction(meshData, cubeInstruction.getAppearance());
 
          doAddMeshDataInstruction(meshDataInstruction);
@@ -272,7 +271,8 @@ public class JavaFXGraphicsObject extends Graphics3DInstructionExecutor
 
          MeshDataHolder meshData = MeshDataGenerator.Cylinder(cylinderInstruction.getRadius(),
                                                               cylinderInstruction.getHeight(),
-                                                              cylinderInstruction.getResolution());
+                                                              cylinderInstruction.getResolution(),
+                                                              false);
          Graphics3DAddMeshDataInstruction meshDataInstruction = Graphics3DObject.createMeshDataInstruction(meshData, cylinderInstruction.getAppearance());
          doAddMeshDataInstruction(meshDataInstruction);
       }
@@ -336,7 +336,7 @@ public class JavaFXGraphicsObject extends Graphics3DInstructionExecutor
       {
          PolygonGraphics3DInstruction polygonInstruction = (PolygonGraphics3DInstruction) primitiveInstruction;
 
-         MeshDataHolder meshData = MeshDataGenerator.Polygon(polygonInstruction.getPolygonPoints());
+         MeshDataHolder meshData = MeshDataGenerator.PolygonCounterClockwise(polygonInstruction.getPolygonPoints());
          Graphics3DAddMeshDataInstruction meshDataInstruction = Graphics3DObject.createMeshDataInstruction(meshData, polygonInstruction.getAppearance());
          doAddMeshDataInstruction(meshDataInstruction);
       }

@@ -68,7 +68,7 @@ public class JavaFXMultiColorMeshBuilder
     */
    public void addBox(double lx, double ly, double lz, Tuple3DReadOnly offset, Color color)
    {
-      addMesh(MeshDataGenerator.Cube(lx, ly, lz, true, null), offset, color);
+      addMesh(MeshDataGenerator.Cube(lx, ly, lz, true), offset, color);
    }
 
    /**
@@ -81,7 +81,7 @@ public class JavaFXMultiColorMeshBuilder
     */
    public void addBox(float lx, float ly, float lz, Color color)
    {
-      addMesh(MeshDataGenerator.Cube(lx, ly, lz, true, null), color);
+      addMesh(MeshDataGenerator.Cube(lx, ly, lz, true), color);
    }
 
    /**
@@ -95,7 +95,7 @@ public class JavaFXMultiColorMeshBuilder
     */
    public void addBox(float lx, float ly, float lz, Tuple3DReadOnly offset, Color color)
    {
-      addMesh(MeshDataGenerator.Cube(lx, ly, lz, true, null), offset, color);
+      addMesh(MeshDataGenerator.Cube(lx, ly, lz, true), offset, color);
    }
 
    /**
@@ -179,7 +179,7 @@ public class JavaFXMultiColorMeshBuilder
     */
    public void addCylinder(double height, double radius, Tuple3DReadOnly offset, Orientation3DReadOnly orientation, Color color)
    {
-      addMesh(MeshDataGenerator.Cylinder(radius, height, DEFAULT_RES), offset, orientation, color);
+      addMesh(MeshDataGenerator.Cylinder(radius, height, DEFAULT_RES, false), offset, orientation, color);
    }
 
    /**
@@ -192,7 +192,7 @@ public class JavaFXMultiColorMeshBuilder
     */
    public void addCylinder(double height, double radius, Tuple3DReadOnly offset, Color color)
    {
-      addMesh(MeshDataGenerator.Cylinder(radius, height, DEFAULT_RES), offset, color);
+      addMesh(MeshDataGenerator.Cylinder(radius, height, DEFAULT_RES, false), offset, color);
    }
 
    /**
@@ -532,7 +532,7 @@ public class JavaFXMultiColorMeshBuilder
     */
    public void addPolygon(List<? extends Point3DReadOnly> polygon, Color color)
    {
-      addMesh(MeshDataGenerator.Polygon(polygon), color);
+      addMesh(MeshDataGenerator.PolygonCounterClockwise(polygon), color);
    }
 
    /**
