@@ -36,7 +36,7 @@ public class MeshDataGeneratorVisualizer
       if (USE_TEXTURE)
       {
          defaultMaterial = new PhongMaterial();
-         Image image = new Image(getClass().getClassLoader().getResourceAsStream("debugTextureGrid.jpg"));
+         Image image = new Image(getClass().getClassLoader().getResourceAsStream("debuggingTextureGrid.jpg"));
          defaultMaterial.setDiffuseMap(image);
       }
       else
