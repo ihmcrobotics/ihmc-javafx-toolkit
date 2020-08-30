@@ -28,10 +28,10 @@ import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.MeshView;
 import javafx.scene.transform.Affine;
 import us.ihmc.euclid.transform.AffineTransform;
+import us.ihmc.euclid.tuple2D.Point2D32;
 import us.ihmc.euclid.tuple3D.Point3D32;
 import us.ihmc.euclid.tuple3D.Vector3D32;
 import us.ihmc.graphicsDescription.MeshDataHolder;
-import us.ihmc.graphicsDescription.TexCoord2f;
 import us.ihmc.javaFXToolkit.JavaFXTools;
 
 public class JAssImpJavaFXTools
@@ -169,7 +169,7 @@ public class JAssImpJavaFXTools
             int numberOfTriangles = aiMesh.getNumFaces();
 
             Point3D32[] vertices = new Point3D32[totalNumberOfVertices];
-            TexCoord2f[] texturePoints = new TexCoord2f[totalNumberOfVertices];
+            Point2D32[] texturePoints = new Point2D32[totalNumberOfVertices];
             Vector3D32[] vertexNormals = new Vector3D32[totalNumberOfVertices];
             int[] triangleIndices = new int[3 * totalNumberOfVertices];
 
@@ -193,11 +193,11 @@ public class JAssImpJavaFXTools
                      float texCoordU = aiMesh.getTexCoordU(faceVertexIndex, uvIndexToUse);
                      float texCoordV = aiMesh.getTexCoordV(faceVertexIndex, uvIndexToUse);
 
-                     texturePoints[currentIndex] = new TexCoord2f(texCoordU, texCoordV);
+                     texturePoints[currentIndex] = new Point2D32(texCoordU, texCoordV);
                   }
                   else
                   {
-                     texturePoints[currentIndex] = new TexCoord2f();
+                     texturePoints[currentIndex] = new Point2D32();
                   }
 
                   for (int l = 0; l < 3; l++)

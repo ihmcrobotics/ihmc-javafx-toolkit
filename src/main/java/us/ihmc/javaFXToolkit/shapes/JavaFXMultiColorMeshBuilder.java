@@ -12,6 +12,7 @@ import javafx.scene.shape.MeshView;
 import us.ihmc.euclid.geometry.interfaces.ConvexPolygon2DReadOnly;
 import us.ihmc.euclid.orientation.interfaces.Orientation3DReadOnly;
 import us.ihmc.euclid.transform.interfaces.RigidBodyTransformReadOnly;
+import us.ihmc.euclid.tuple2D.Point2D32;
 import us.ihmc.euclid.tuple2D.interfaces.Point2DReadOnly;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Point3D32;
@@ -20,7 +21,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Tuple3DReadOnly;
 import us.ihmc.graphicsDescription.MeshDataGenerator;
 import us.ihmc.graphicsDescription.MeshDataHolder;
-import us.ihmc.graphicsDescription.TexCoord2f;
 
 /**
  * Based on a {@link JavaFXMeshBuilder}, this class can combine different meshes with different
@@ -265,7 +265,7 @@ public class JavaFXMultiColorMeshBuilder
       MeshDataHolder lineMeshData = MeshDataGenerator.Line(x0, y0, z0, xf, yf, zf, lineWidth);
 
       Point3D32[] vertices = lineMeshData.getVertices();
-      TexCoord2f[] texturePoints = lineMeshData.getTexturePoints();
+      Point2D32[] texturePoints = lineMeshData.getTexturePoints();
 
       Point3D32 start = new Point3D32(x0, y0, z0);
       Point3D32 end = new Point3D32(xf, yf, zf);
@@ -649,11 +649,11 @@ public class JavaFXMultiColorMeshBuilder
       Point3D32[] vertices = input.getVertices();
       int[] triangleIndices = input.getTriangleIndices();
       Vector3D32[] vertexNormals = input.getVertexNormals();
-      TexCoord2f[] inputTexturePoints = input.getTexturePoints();
-      TexCoord2f[] outputTexturePoints = new TexCoord2f[inputTexturePoints.length];
+      Point2D32[] inputTexturePoints = input.getTexturePoints();
+      Point2D32[] outputTexturePoints = new Point2D32[inputTexturePoints.length];
       float[] textureLocation = colorPalette.getTextureLocation(color);
       for (int i = 0; i < inputTexturePoints.length; i++)
-         outputTexturePoints[i] = new TexCoord2f(textureLocation);
+         outputTexturePoints[i] = new Point2D32(textureLocation);
       return new MeshDataHolder(vertices, outputTexturePoints, triangleIndices, vertexNormals);
    }
 }

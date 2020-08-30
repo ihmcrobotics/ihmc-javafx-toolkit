@@ -10,6 +10,7 @@ import gnu.trove.list.array.TIntArrayList;
 import javafx.scene.shape.MeshView;
 import javafx.scene.shape.TriangleMesh;
 import javafx.scene.shape.VertexFormat;
+import us.ihmc.euclid.tuple2D.Point2D32;
 import us.ihmc.euclid.tuple2D.interfaces.Tuple2DBasics;
 import us.ihmc.euclid.tuple3D.Point3D32;
 import us.ihmc.euclid.tuple3D.Vector3D32;
@@ -17,7 +18,6 @@ import us.ihmc.euclid.tuple3D.interfaces.Tuple3DBasics;
 import us.ihmc.graphicsDescription.MeshDataBuilder;
 import us.ihmc.graphicsDescription.MeshDataGenerator;
 import us.ihmc.graphicsDescription.MeshDataHolder;
-import us.ihmc.graphicsDescription.TexCoord2f;
 import us.ihmc.log.LogTools;
 
 /**
@@ -60,7 +60,7 @@ public class JavaFXMeshDataInterpreter
          return null;
 
       Point3D32[] vertices = meshData.getVertices();
-      TexCoord2f[] texturePoints = meshData.getTexturePoints();
+      Point2D32[] texturePoints = meshData.getTexturePoints();
       int[] triangleIndices = meshData.getTriangleIndices();
       Vector3D32[] normals = meshData.getVertexNormals();
       TIntArrayList facesIndices = new TIntArrayList();
@@ -69,7 +69,7 @@ public class JavaFXMeshDataInterpreter
       {
          Pair<int[], Point3D32[]> filterDuplicateVertices = filterDuplicates(triangleIndices, vertices);
          Pair<int[], Vector3D32[]> filterDuplicateNormals = filterDuplicates(triangleIndices, normals);
-         Pair<int[], TexCoord2f[]> filterDuplicateTex = filterDuplicates(triangleIndices, texturePoints);
+         Pair<int[], Point2D32[]> filterDuplicateTex = filterDuplicates(triangleIndices, texturePoints);
          vertices = filterDuplicateVertices.getRight();
          normals = filterDuplicateNormals.getRight();
          texturePoints = filterDuplicateTex.getRight();
