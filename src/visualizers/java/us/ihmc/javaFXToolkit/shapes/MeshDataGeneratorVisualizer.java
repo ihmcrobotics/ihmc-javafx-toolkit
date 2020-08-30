@@ -129,7 +129,7 @@ public class MeshDataGeneratorVisualizer
       polygon.setTranslateY(-0.5);
       view3dFactory.addNodeToView(polygon);
 
-      MeshView cube = new MeshView(JavaFXMeshDataInterpreter.interpretMeshData(MeshDataGenerator.Cube(0.1, 0.2, 0.3, false)));
+      MeshView cube = new MeshView(JavaFXMeshDataInterpreter.interpretMeshData(MeshDataGenerator.Box(0.1, 0.2, 0.3, false)));
       cube.setMaterial(defaultMaterial);
       cube.setTranslateX(1.0);
       cube.setTranslateY(0.0);

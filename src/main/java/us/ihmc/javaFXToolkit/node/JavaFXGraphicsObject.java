@@ -211,7 +211,7 @@ public class JavaFXGraphicsObject extends Graphics3DInstructionExecutor
       {
          CubeGraphics3DInstruction cubeInstruction = (CubeGraphics3DInstruction) primitiveInstruction;
 
-         MeshDataHolder meshData = MeshDataGenerator.Cube(cubeInstruction.getLength(),
+         MeshDataHolder meshData = MeshDataGenerator.Box(cubeInstruction.getLength(),
                                                           cubeInstruction.getWidth(),
                                                           cubeInstruction.getHeight(),
                                                           cubeInstruction.getCenteredInTheCenter());

@@ -68,7 +68,7 @@ public class JavaFXMultiColorMeshBuilder
     */
    public void addBox(double lx, double ly, double lz, Tuple3DReadOnly offset, Color color)
    {
-      addMesh(MeshDataGenerator.Cube(lx, ly, lz, true), offset, color);
+      addMesh(MeshDataGenerator.Box(lx, ly, lz, true), offset, color);
    }
 
    /**
@@ -81,7 +81,7 @@ public class JavaFXMultiColorMeshBuilder
     */
    public void addBox(float lx, float ly, float lz, Color color)
    {
-      addMesh(MeshDataGenerator.Cube(lx, ly, lz, true), color);
+      addMesh(MeshDataGenerator.Box(lx, ly, lz, true), color);
    }
 
    /**
@@ -95,7 +95,7 @@ public class JavaFXMultiColorMeshBuilder
     */
    public void addBox(float lx, float ly, float lz, Tuple3DReadOnly offset, Color color)
    {
-      addMesh(MeshDataGenerator.Cube(lx, ly, lz, true), offset, color);
+      addMesh(MeshDataGenerator.Box(lx, ly, lz, true), offset, color);
    }
 
    /**
