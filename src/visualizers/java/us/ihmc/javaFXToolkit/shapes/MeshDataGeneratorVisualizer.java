@@ -93,7 +93,7 @@ public class MeshDataGeneratorVisualizer
       line.setTranslateY(1.0);
       view3dFactory.addNodeToView(line);
 
-      MeshView pyramidCube = new MeshView(JavaFXMeshDataInterpreter.interpretMeshData(MeshDataGenerator.PyramidCube(0.1, 0.2, 0.1, 0.25)));
+      MeshView pyramidCube = new MeshView(JavaFXMeshDataInterpreter.interpretMeshData(MeshDataGenerator.PyramidBox(0.1, 0.2, 0.1, 0.25)));
       pyramidCube.setMaterial(defaultMaterial);
       pyramidCube.setTranslateX(0.5);
       pyramidCube.setTranslateY(-0.5);
@@ -105,7 +105,7 @@ public class MeshDataGeneratorVisualizer
       capsule.setTranslateY(-1.0);
       view3dFactory.addNodeToView(capsule);
 
-      MeshView genTruncatedCone = new MeshView(JavaFXMeshDataInterpreter.interpretMeshData(MeshDataGenerator.GenTruncatedCone(0.3, 0.2, 0.07, 0.05, 0.1, 64)));
+      MeshView genTruncatedCone = new MeshView(JavaFXMeshDataInterpreter.interpretMeshData(MeshDataGenerator.TruncatedCone(0.3, 0.2, 0.07, 0.05, 0.1, 64)));
       genTruncatedCone.setMaterial(defaultMaterial);
       genTruncatedCone.setTranslateX(-0.5);
       genTruncatedCone.setTranslateY(0.0);

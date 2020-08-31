@@ -288,7 +288,7 @@ public class JavaFXGraphicsObject extends Graphics3DInstructionExecutor
       {
          TruncatedConeGraphics3DInstruction truncatedConeInstruction = (TruncatedConeGraphics3DInstruction) primitiveInstruction;
 
-         MeshDataHolder meshData = MeshDataGenerator.GenTruncatedCone(truncatedConeInstruction.getHeight(),
+         MeshDataHolder meshData = MeshDataGenerator.TruncatedCone(truncatedConeInstruction.getHeight(),
                                                                       truncatedConeInstruction.getXBaseRadius(),
                                                                       truncatedConeInstruction.getYBaseRadius(),
                                                                       truncatedConeInstruction.getXTopRadius(),
@@ -325,7 +325,7 @@ public class JavaFXGraphicsObject extends Graphics3DInstructionExecutor
       {
          PyramidCubeGraphics3DInstruction pyramidInstruction = (PyramidCubeGraphics3DInstruction) primitiveInstruction;
 
-         MeshDataHolder meshData = MeshDataGenerator.PyramidCube(pyramidInstruction.getLengthX(),
+         MeshDataHolder meshData = MeshDataGenerator.PyramidBox(pyramidInstruction.getLengthX(),
                                                                  pyramidInstruction.getWidthY(),
                                                                  pyramidInstruction.getHeightZ(),
                                                                  pyramidInstruction.getPyramidHeight());
