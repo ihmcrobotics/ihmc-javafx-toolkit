@@ -19,7 +19,6 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.graphicsDescription.Graphics3DObject;
 import us.ihmc.graphicsDescription.appearance.AppearanceDefinition;
 import us.ihmc.graphicsDescription.appearance.YoAppearanceRGBColor;
-import us.ihmc.graphicsDescription.instructions.GeometryGraphics3DInstruction;
 import us.ihmc.graphicsDescription.instructions.Graphics3DAddExtrusionInstruction;
 import us.ihmc.graphicsDescription.instructions.Graphics3DAddHeightMapInstruction;
 import us.ihmc.graphicsDescription.instructions.Graphics3DAddMeshDataInstruction;
@@ -30,7 +29,6 @@ import us.ihmc.graphicsDescription.instructions.Graphics3DPrimitiveInstruction;
 import us.ihmc.graphicsDescription.instructions.primitives.Graphics3DRotateInstruction;
 import us.ihmc.graphicsDescription.instructions.primitives.Graphics3DScaleInstruction;
 import us.ihmc.graphicsDescription.instructions.primitives.Graphics3DTranslateInstruction;
-import us.ihmc.graphicsDescription.mesh.MeshDataGenerator;
 import us.ihmc.graphicsDescription.mesh.MeshDataHolder;
 import us.ihmc.javaFXToolkit.graphics.JAssImpJavaFXTools;
 import us.ihmc.javaFXToolkit.graphics.JavaFXMeshDataInterpreter;
@@ -189,15 +187,5 @@ public class JavaFXGraphicsObject extends Graphics3DInstructionExecutor
    private static TriangleMesh interpretMeshData(MeshDataHolder meshData)
    {
       return JavaFXMeshDataInterpreter.interpretMeshData(meshData);
-   }
-
-   @Override
-   protected void doAddGeometryInstruction(GeometryGraphics3DInstruction instruction)
-   {
-      MeshDataHolder meshData = MeshDataGenerator.Mesh(instruction.getGeometry());
-      if (meshData == null)
-         throw new RuntimeException("Need to support that primitive type! primitiveInstruction = " + instruction);
-      Graphics3DAddMeshDataInstruction meshDataInstruction = Graphics3DObject.createMeshDataInstruction(meshData, instruction.getAppearance());
-      doAddMeshDataInstruction(meshDataInstruction);
    }
 }
