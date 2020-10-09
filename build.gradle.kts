@@ -32,7 +32,7 @@ mainDependencies {
    }
 
    api("us.ihmc:euclid:0.15.1")
-   api("us.ihmc:ihmc-yovariables:0.9.4")
+   api("us.ihmc:ihmc-yovariables:0.9.5")
    api("us.ihmc:ihmc-messager:0.1.5")
    api("us.ihmc:ihmc-graphics-description:0.19.1")
    api("us.ihmc:jassimp:4.0.0-ihmc5")
