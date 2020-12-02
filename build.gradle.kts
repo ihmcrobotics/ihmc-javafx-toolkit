@@ -34,7 +34,7 @@ mainDependencies {
    api("us.ihmc:euclid:0.15.2")
    api("us.ihmc:ihmc-yovariables:0.9.7")
    api("us.ihmc:ihmc-messager:0.1.5")
-   api("us.ihmc:ihmc-graphics-description:0.19.1")
+   api("us.ihmc:ihmc-graphics-description:0.19.2")
    api("us.ihmc:jassimp:4.0.0-ihmc5")
 
    var javaFXVersion = "11.0.2"
