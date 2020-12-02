@@ -19,16 +19,15 @@ import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.graphicsDescription.Graphics3DObject;
 import us.ihmc.graphicsDescription.appearance.AppearanceDefinition;
 import us.ihmc.graphicsDescription.appearance.YoAppearanceRGBColor;
-import us.ihmc.graphicsDescription.instructions.Graphics3DAddExtrusionInstruction;
-import us.ihmc.graphicsDescription.instructions.Graphics3DAddHeightMapInstruction;
-import us.ihmc.graphicsDescription.instructions.Graphics3DAddMeshDataInstruction;
-import us.ihmc.graphicsDescription.instructions.Graphics3DAddModelFileInstruction;
+import us.ihmc.graphicsDescription.geometry.ModelFileGeometryDescription;
+import us.ihmc.graphicsDescription.instructions.GeometryGraphics3DInstruction;
 import us.ihmc.graphicsDescription.instructions.Graphics3DInstruction;
 import us.ihmc.graphicsDescription.instructions.Graphics3DInstructionExecutor;
 import us.ihmc.graphicsDescription.instructions.Graphics3DPrimitiveInstruction;
 import us.ihmc.graphicsDescription.instructions.primitives.Graphics3DRotateInstruction;
 import us.ihmc.graphicsDescription.instructions.primitives.Graphics3DScaleInstruction;
 import us.ihmc.graphicsDescription.instructions.primitives.Graphics3DTranslateInstruction;
+import us.ihmc.graphicsDescription.mesh.MeshDataGenerator;
 import us.ihmc.graphicsDescription.mesh.MeshDataHolder;
 import us.ihmc.javaFXToolkit.graphics.JAssImpJavaFXTools;
 import us.ihmc.javaFXToolkit.graphics.JavaFXMeshDataInterpreter;
@@ -65,57 +64,47 @@ public class JavaFXGraphicsObject extends Graphics3DInstructionExecutor
    }
 
    @Override
-   protected void doAddMeshDataInstruction(Graphics3DAddMeshDataInstruction graphics3DAddMeshData)
+   protected void doAddGeometryInstruction(GeometryGraphics3DInstruction instruction)
    {
-      graphics3DAddMeshData.getMeshData().getVertices();
-      TriangleMesh outputMesh = interpretMeshData(graphics3DAddMeshData.getMeshData());
-      Material outputMaterial = convertMaterial(graphics3DAddMeshData.getAppearance());
-
-      MeshView meshView = new MeshView();
-      meshView.setMesh(outputMesh);
-      meshView.setMaterial(outputMaterial);
-      Group meshGroup = new Group(meshView);
-      currentGroup.getChildren().add(meshGroup);
-      currentGroup = meshGroup;
-   }
-
-   @Override
-   protected void doAddHeightMapInstruction(Graphics3DAddHeightMapInstruction graphics3DAddHeightMap)
-   {
-      // not implemented yet
-   }
-
-   @Override
-   protected void doAddExtrusionInstruction(Graphics3DAddExtrusionInstruction graphics3DAddText)
-   {
-      // not implemented yet
-   }
-
-   @Override
-   protected void doAddModelFileInstruction(Graphics3DAddModelFileInstruction graphics3DAddModelFile)
-   {
-      MeshView[] outputModelMeshes = new MeshView[0];
-      try
+      if (instruction.getGeometry() instanceof ModelFileGeometryDescription)
       {
-         outputModelMeshes = JAssImpJavaFXTools.getJavaFxMeshes(graphics3DAddModelFile.getFileName(), graphics3DAddModelFile.getResourceClassLoader());
-      }
-      catch (URISyntaxException | IOException e)
-      {
-         e.printStackTrace();
-      }
-
-      if (graphics3DAddModelFile.getAppearance() != null)
-      {
-         Material outputMaterial = convertMaterial(graphics3DAddModelFile.getAppearance());
-         for (int i = 0; i < outputModelMeshes.length; i++)
+         ModelFileGeometryDescription modelFile = (ModelFileGeometryDescription) instruction.getGeometry();
+         MeshView[] outputModelMeshes = new MeshView[0];
+         try
          {
-            outputModelMeshes[i].setMaterial(outputMaterial);
+            outputModelMeshes = JAssImpJavaFXTools.getJavaFxMeshes(modelFile.getFileName(), modelFile.getResourceClassLoader());
          }
-      }
+         catch (URISyntaxException | IOException e)
+         {
+            e.printStackTrace();
+         }
 
-      Group meshGroup = new Group(outputModelMeshes);
-      currentGroup.getChildren().add(meshGroup);
-      currentGroup = meshGroup;
+         if (instruction.getAppearance() != null)
+         {
+            Material outputMaterial = convertMaterial(instruction.getAppearance());
+            for (int i = 0; i < outputModelMeshes.length; i++)
+            {
+               outputModelMeshes[i].setMaterial(outputMaterial);
+            }
+         }
+
+         Group meshGroup = new Group(outputModelMeshes);
+         currentGroup.getChildren().add(meshGroup);
+         currentGroup = meshGroup;
+      }
+      else
+      {
+         MeshDataHolder mesh = MeshDataGenerator.Mesh(instruction.getGeometry());
+         TriangleMesh outputMesh = interpretMeshData(mesh);
+         Material outputMaterial = convertMaterial(instruction.getAppearance());
+
+         MeshView meshView = new MeshView();
+         meshView.setMesh(outputMesh);
+         meshView.setMaterial(outputMaterial);
+         Group meshGroup = new Group(meshView);
+         currentGroup.getChildren().add(meshGroup);
+         currentGroup = meshGroup;
+      }
    }
 
    @Override
