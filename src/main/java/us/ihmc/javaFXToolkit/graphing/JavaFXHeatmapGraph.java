@@ -77,7 +77,7 @@ public class JavaFXHeatmapGraph
 
       focusPoint = new Point2D(1.0, 1.0);
       transformToCanvasSpace = new AffineTransform();
-      transformToCanvasSpace.setScale(50.0, 50.0, 1.0);
+      transformToCanvasSpace.appendScale(50.0, 50.0, 1.0);
 
       gridCenter = new Point2D();
       plotPencil = new Point2D();
@@ -115,8 +115,8 @@ public class JavaFXHeatmapGraph
             canvas.setWidth(javaFXPanel.getWidth());
             canvas.setHeight(javaFXPanel.getHeight());
 
-            transformToCanvasSpace.setTranslationX((javaFXPanel.getWidth() / 2.0) - (focusPoint.getX() * transformToCanvasSpace.getScaleX()));
-            transformToCanvasSpace.setTranslationY((javaFXPanel.getHeight() / 2.0) - (focusPoint.getY() * transformToCanvasSpace.getScaleY()));
+            transformToCanvasSpace.setTranslationX((javaFXPanel.getWidth() / 2.0) - (focusPoint.getX() * transformToCanvasSpace.getLinearTransform().getScaleX()));
+            transformToCanvasSpace.setTranslationY((javaFXPanel.getHeight() / 2.0) - (focusPoint.getY() * transformToCanvasSpace.getLinearTransform().getScaleY()));
 
             // save graphics context
             graphicsContext.save();
@@ -230,7 +230,7 @@ public class JavaFXHeatmapGraph
          transformToCanvasSpace.transform(plotPencil);
 
          graphicsContext.setFill(getHeatColor(heat));
-         fillRect(plotPencil.getX(), plotPencil.getY(), discreteX * transformToCanvasSpace.getScaleX(), discreteY * transformToCanvasSpace.getScaleY());
+         fillRect(plotPencil.getX(), plotPencil.getY(), discreteX * transformToCanvasSpace.getLinearTransform().getScaleX(), discreteY * transformToCanvasSpace.getLinearTransform().getScaleY());
       }
 
       heatmap.clear();
@@ -272,7 +272,7 @@ public class JavaFXHeatmapGraph
 
    private void setViewRange(double viewRangeXMeters, double viewRangeYMeters)
    {
-      transformToCanvasSpace.setScale(javaFXPanel.getWidth() / viewRangeXMeters, javaFXPanel.getHeight() / viewRangeYMeters, 1.0);
+      transformToCanvasSpace.getLinearTransform().setScale(javaFXPanel.getWidth() / viewRangeXMeters, javaFXPanel.getHeight() / viewRangeYMeters, 1.0);
    }
 
    public BufferedImage snapshot()
