@@ -1,4 +1,4 @@
 # IHMC JavaFX Toolkit
 
-[ ![Download](https://api.bintray.com/packages/ihmcrobotics/maven-release/ihmc-javafx-toolkit/images/download.svg) ](https://bintray.com/ihmcrobotics/maven-release/ihmc-javafx-toolkit/_latestVersion)
+[ ![Download](https://maven-badges.herokuapp.com/maven-central/us.ihmc/ihmc-javafx-toolkit/badge.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/us.ihmc/ihmc-javafx-toolkit)
 [ ![buildstatus](https://bamboo.ihmc.us/plugins/servlet/wittified/build-status/LIBS-IHMCJAVAFXTOOLKIT)](https://bamboo.ihmc.us/plugins/servlet/wittified/build-status/LIBS-IHMCJAVAFXTOOLKIT)
