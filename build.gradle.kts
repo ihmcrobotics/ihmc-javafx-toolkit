@@ -26,9 +26,10 @@ mainDependencies {
    api("net.sf.trove4j:trove4j:3.0.3")
    api("org.apache.commons:commons-lang3:3.11")
 
-   api("org.fxyz3d:fxyz3d:0.5.4") {
+   api("org.fxyz3d:fxyz3d:0.1.1") {
       exclude(group = "java3d", module = "vecmath")
       exclude(group = "org.slf4j", module = "slf4j-simple")
+      exclude(group = "eu.mihosoft.vrl.jcsg", module = "jcsg")
    }
 
    api("us.ihmc:euclid:0.16.0")
