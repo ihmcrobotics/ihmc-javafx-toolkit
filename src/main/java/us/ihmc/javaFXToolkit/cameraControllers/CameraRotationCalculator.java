@@ -9,6 +9,7 @@ import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.event.EventHandler;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.input.MouseButton;
@@ -118,6 +119,8 @@ public class CameraRotationCalculator
    private final Vector3D down = new Vector3D();
    private final Vector3D forward = new Vector3D();
 
+   private boolean disableAffineAutoUpdate = false;
+
    /**
     * Creates a calculator for the camera rotation.
     *
@@ -137,6 +140,15 @@ public class CameraRotationCalculator
       down.setAndNegate(up);
 
       computeOffset();
+
+      ChangeListener<? super Number> listener = (o, oldValue, newValue) ->
+      {
+         if (!disableAffineAutoUpdate)
+            updateRotation();
+      };
+      latitude.addListener(listener);
+      longitude.addListener(listener);
+      roll.addListener(listener);
    }
 
    private void computeOffset()
@@ -218,6 +230,7 @@ public class CameraRotationCalculator
     */
    public void updateRotation(double deltaLatitude, double deltaLongitude, double deltaRoll)
    {
+      disableAffineAutoUpdate = true;
       double newLatitude = latitude.get() + deltaLatitude;
       if (restrictLatitude.get())
          newLatitude = MathTools.clamp(newLatitude, minLatitude.get(), maxLatitude.get());
@@ -238,7 +251,7 @@ public class CameraRotationCalculator
          newRoll = EuclidCoreTools.trimAngleMinusPiToPi(newRoll);
          roll.set(newRoll);
       }
-
+      disableAffineAutoUpdate = false;
       updateRotation();
    }
 
@@ -251,6 +264,7 @@ public class CameraRotationCalculator
     */
    public void setRotationFromCameraAndFocusPositions(Point3DReadOnly cameraPosition, Point3DReadOnly focusPoint, double cameraRoll)
    {
+      disableAffineAutoUpdate = true;
       Vector3D fromFocusToCamera = new Vector3D();
       fromFocusToCamera.sub(cameraPosition, focusPoint);
       fromFocusToCamera.normalize();
@@ -271,6 +285,7 @@ public class CameraRotationCalculator
       latitude.set(newLatitude);
       longitude.set(newLongitude);
       roll.set(cameraRoll);
+      disableAffineAutoUpdate = false;
       updateRotation();
    }
 
@@ -283,6 +298,7 @@ public class CameraRotationCalculator
     */
    public void setRotation(double latitude, double longitude, double roll)
    {
+      disableAffineAutoUpdate = true;
       if (restrictLatitude.get())
          this.latitude.set(MathTools.clamp(latitude, minLatitude.get(), maxLatitude.get()));
       else
@@ -290,6 +306,7 @@ public class CameraRotationCalculator
 
       this.longitude.set(EuclidCoreTools.trimAngleMinusPiToPi(longitude));
       this.roll.set(EuclidCoreTools.trimAngleMinusPiToPi(roll));
+      disableAffineAutoUpdate = false;
       updateRotation();
    }
 
