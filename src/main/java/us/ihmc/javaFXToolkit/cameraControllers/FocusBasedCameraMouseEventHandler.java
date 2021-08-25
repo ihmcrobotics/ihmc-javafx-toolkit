@@ -77,6 +77,8 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
 
    private final PerspectiveCamera camera;
 
+   private final AnimationTimer focusPointResizeAnimation;
+
    public FocusBasedCameraMouseEventHandler(ReadOnlyDoubleProperty sceneWidthProperty,
                                             ReadOnlyDoubleProperty sceneHeightProperty,
                                             PerspectiveCamera camera,
@@ -121,7 +123,7 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
 
       setupCameraRotationHandler();
 
-      new AnimationTimer()
+      focusPointResizeAnimation = new AnimationTimer()
       {
          @Override
          public void handle(long now)
@@ -129,7 +131,8 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
             double sphereRadius = 0.0025 * Math.abs(offsetFromFocusPoint.getTz());
             focusPointViz.setRadius(sphereRadius);
          }
-      }.start();
+      };
+      focusPointResizeAnimation.start();
    }
 
    public void changeCameraPosition(double x, double y, double z)
@@ -326,6 +329,13 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
             oldMouseLocation.set(newMouseLocation);
          }
       };
+   }
+
+   public void dispose()
+   {
+      cameraRotationEventHandler = null;
+      translationCalculator.dispose();
+      focusPointResizeAnimation.stop();
    }
 
    public Sphere getFocusPointViz()

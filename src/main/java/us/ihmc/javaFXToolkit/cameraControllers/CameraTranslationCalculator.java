@@ -1,5 +1,7 @@
 package us.ihmc.javaFXToolkit.cameraControllers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
 
 import javafx.animation.AnimationTimer;
@@ -89,6 +91,8 @@ public class CameraTranslationCalculator
 
    private final Vector3D down = new Vector3D();
 
+   private final List<Runnable> cleanupActions = new ArrayList<>();
+
    /**
     * Creates a calculator for the camera translation.
     *
@@ -97,6 +101,11 @@ public class CameraTranslationCalculator
    public CameraTranslationCalculator(Vector3DReadOnly up)
    {
       down.setAndNegate(up);
+   }
+
+   public void dispose()
+   {
+      cleanupActions.forEach(Runnable::run);
    }
 
    /**
@@ -117,6 +126,8 @@ public class CameraTranslationCalculator
          }
       };
       translateAnimation.start();
+
+      cleanupActions.add(() -> translateAnimation.stop());
 
       EventHandler<KeyEvent> keyEventHandler = new EventHandler<KeyEvent>()
       {
