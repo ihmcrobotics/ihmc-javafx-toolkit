@@ -62,7 +62,7 @@ public class MessageBidirectionalBinding<M, P> implements TopicListener<M>, Chan
    public void receivedMessageForTopic(M messageContent)
    {
       P interpretedContent = converter.interpret(messageContent);
-      boolean updateProperty = !boundProperty.getValue().equals(interpretedContent);
+      boolean updateProperty = boundProperty.getValue() == null ? interpretedContent != null : !boundProperty.getValue().equals(interpretedContent);
       changedOnMessageReception.set(updateProperty);
       if (updateProperty)
          boundProperty.setValue(interpretedContent);
