@@ -9,12 +9,12 @@ buildscript {
 plugins {
    id("us.ihmc.ihmc-build")
    id("us.ihmc.ihmc-ci") version "7.4"
-   id("us.ihmc.ihmc-cd") version "1.17"
+   id("us.ihmc.ihmc-cd") version "1.20"
 }
 
 ihmc {
    group = "us.ihmc"
-   version = "0.19.3"
+   version = "0.20.0"
    vcsUrl = "https://github.com/ihmcrobotics/ihmc-javafx-toolkit"
    openSource = true
    
@@ -31,10 +31,10 @@ mainDependencies {
       exclude(group = "org.slf4j", module = "slf4j-simple")
    }
 
-   api("us.ihmc:euclid:0.16.0")
-   api("us.ihmc:ihmc-yovariables:0.9.8")
+   api("us.ihmc:euclid:0.17.0")
+   api("us.ihmc:ihmc-yovariables:0.9.11")
    api("us.ihmc:ihmc-messager:0.1.7")
-   api("us.ihmc:ihmc-graphics-description:0.19.3")
+   api("us.ihmc:ihmc-graphics-description:0.19.4")
    api("us.ihmc:jassimp:4.0.0-ihmc6")
 
    var javaFXVersion = "11.0.2"

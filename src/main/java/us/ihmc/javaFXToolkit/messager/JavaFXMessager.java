@@ -1,5 +1,6 @@
 package us.ihmc.javaFXToolkit.messager;
 
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
@@ -47,10 +48,13 @@ public interface JavaFXMessager extends Messager
     *
     * @param topicToBind     the topic to bind to the observable value.
     * @param observableValue the value which is to trigger sending message.
+    * @return the topic's binding.
     */
-   default <T> void bindTopic(Topic<T> topicToBind, ObservableValue<T> observableValue)
+   default <T> InvalidationListener bindTopic(Topic<T> topicToBind, ObservableValue<T> observableValue)
    {
-      observableValue.addListener((observable) -> submitMessage(topicToBind, observableValue.getValue()));
+      InvalidationListener listener = (observable) -> submitMessage(topicToBind, observableValue.getValue());
+      observableValue.addListener(listener);
+      return listener;
    }
 
    /**
@@ -59,10 +63,13 @@ public interface JavaFXMessager extends Messager
     *
     * @param topic          the topic which is to trigger updating the property.
     * @param propertyToBind the property to bind to the given topic.
+    * @return the property's binding.
     */
-   default <T> void bindPropertyToTopic(Topic<T> topic, Property<T> propertyToBind)
+   default <T> TopicListener<T> bindPropertyToTopic(Topic<T> topic, Property<T> propertyToBind)
    {
-      registerJavaFXSyncedTopicListener(topic, propertyToBind::setValue);
+      TopicListener<T> listener = messageContent -> propertyToBind.setValue(messageContent);
+      registerJavaFXSyncedTopicListener(topic, listener);
+      return listener;
    }
 
    /**
@@ -72,8 +79,9 @@ public interface JavaFXMessager extends Messager
     * @param property  the property to bind.
     * @param pushValue whether the current property value should be should be submitted to the
     *                  messager.
+    * @return the new binding between the topic and property.
     */
-   default <T> void bindBidirectional(Topic<T> topic, Property<T> property, boolean pushValue)
+   default <T> MessageBidirectionalBinding<T, T> bindBidirectional(Topic<T> topic, Property<T> property, boolean pushValue)
    {
       MessageBidirectionalBinding<T, T> bind = MessageBidirectionalBinding.createSingleTypedBinding(messageContent -> submitMessage(topic, messageContent),
                                                                                                     property);
@@ -81,6 +89,7 @@ public interface JavaFXMessager extends Messager
       registerJavaFXSyncedTopicListener(topic, bind);
       if (pushValue)
          submitMessage(topic, property.getValue());
+      return bind;
    }
 
    /**
@@ -91,14 +100,19 @@ public interface JavaFXMessager extends Messager
     * @param converter protocol to convert between the topic data type and the property data type.
     * @param pushValue whether the current property value should be should be submitted to the
     *                  messager.
+    * @return the new binding between the topic and property.
     */
-   default <M, P> void bindBidirectional(Topic<M> topic, Property<P> property, PropertyToMessageTypeConverter<M, P> converter, boolean pushValue)
+   default <M, P> MessageBidirectionalBinding<M, P> bindBidirectional(Topic<M> topic,
+                                                                      Property<P> property,
+                                                                      PropertyToMessageTypeConverter<M, P> converter,
+                                                                      boolean pushValue)
    {
       MessageBidirectionalBinding<M, P> bind = new MessageBidirectionalBinding<>(messageContent -> submitMessage(topic, messageContent), property, converter);
       property.addListener(bind);
       registerJavaFXSyncedTopicListener(topic, bind);
       if (pushValue)
          submitMessage(topic, converter.convert(property.getValue()));
+      return bind;
    }
 
    /**

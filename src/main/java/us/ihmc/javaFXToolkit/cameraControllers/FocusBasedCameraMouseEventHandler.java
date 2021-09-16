@@ -1,5 +1,6 @@
 package us.ihmc.javaFXToolkit.cameraControllers;
 
+import java.util.function.DoubleSupplier;
 import java.util.function.Predicate;
 
 import javafx.animation.AnimationTimer;
@@ -31,10 +32,12 @@ import javafx.scene.transform.Translate;
 import javafx.util.Duration;
 import us.ihmc.commons.Epsilons;
 import us.ihmc.commons.MathTools;
+import us.ihmc.euclid.tuple2D.Point2D;
+import us.ihmc.euclid.tuple2D.Vector2D;
 import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
+import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
-import us.ihmc.javaFXToolkit.JavaFXTools;
 
 /**
  * This class provides a simple controller for a JavaFX {@link PerspectiveCamera}. The control is
@@ -64,16 +67,23 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
    private final CameraZoomCalculator zoomCalculator = new CameraZoomCalculator();
    private final CameraRotationCalculator rotationCalculator;
    private final CameraTranslationCalculator translationCalculator;
+   private final Translate nodeTrackingTranslate;
    private final CameraNodeTracker nodeTracker;
 
    private final EventHandler<ScrollEvent> zoomEventHandler = zoomCalculator.createScrollEventHandler();
-   private final EventHandler<MouseEvent> rotationEventHandler;
+   /** For rotating around the focus point. */
+   private final EventHandler<MouseEvent> orbitalRotationEventHandler;
    private final EventHandler<KeyEvent> translationEventHandler;
 
    private final PerspectiveCamera camera;
 
-   public FocusBasedCameraMouseEventHandler(ReadOnlyDoubleProperty sceneWidthProperty, ReadOnlyDoubleProperty sceneHeightProperty, PerspectiveCamera camera,
-                                            Vector3DReadOnly up, Vector3DReadOnly forward)
+   private final AnimationTimer focusPointResizeAnimation;
+
+   public FocusBasedCameraMouseEventHandler(ReadOnlyDoubleProperty sceneWidthProperty,
+                                            ReadOnlyDoubleProperty sceneHeightProperty,
+                                            PerspectiveCamera camera,
+                                            Vector3DReadOnly up,
+                                            Vector3DReadOnly forward)
    {
       this.camera = camera;
       Vector3D left = new Vector3D();
@@ -89,7 +99,7 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
       rotationCalculator = new CameraRotationCalculator(up, forward);
       rotationCalculator.setFastModifierPredicate(event -> event.isShiftDown());
       cameraOrientation = rotationCalculator.getRotation();
-      rotationEventHandler = rotationCalculator.createMouseEventHandler(sceneWidthProperty, sceneHeightProperty);
+      orbitalRotationEventHandler = rotationCalculator.createMouseEventHandler(sceneWidthProperty, sceneHeightProperty);
 
       translationCalculator = new CameraTranslationCalculator(up);
       translationCalculator.setFastModifierPredicate(event -> event.isShiftDown());
@@ -98,14 +108,11 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
       focusPointTranslation = translationCalculator.getTranslation();
       translationEventHandler = translationCalculator.createKeyEventHandler();
       nodeTracker = new CameraNodeTracker(focusPointTranslation);
-      Translate nodeTrackingTranslate = nodeTracker.getNodeTrackingTranslate();
+      nodeTrackingTranslate = nodeTracker.getNodeTrackingTranslate();
 
       changeCameraPosition(-2.0, 0.7, 1.0);
 
       camera.getTransforms().addAll(nodeTrackingTranslate, focusPointTranslation, cameraOrientation, offsetFromFocusPoint);
-
-      Point3D cameraPosition = new Point3D();
-      JavaFXTools.applyTranform(camera.getLocalToSceneTransform(), cameraPosition);
 
       focusPointViz = new Sphere(0.01);
       PhongMaterial material = new PhongMaterial();
@@ -114,7 +121,9 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
       focusPointViz.setMaterial(material);
       focusPointViz.getTransforms().addAll(nodeTrackingTranslate, focusPointTranslation);
 
-      new AnimationTimer()
+      setupCameraRotationHandler();
+
+      focusPointResizeAnimation = new AnimationTimer()
       {
          @Override
          public void handle(long now)
@@ -122,17 +131,65 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
             double sphereRadius = 0.0025 * Math.abs(offsetFromFocusPoint.getTz());
             focusPointViz.setRadius(sphereRadius);
          }
-      }.start();
+      };
+      focusPointResizeAnimation.start();
    }
 
    public void changeCameraPosition(double x, double y, double z)
    {
-      Point3D desiredCameraPosition = new Point3D(x, y, z);
-      Point3D desiredFocusPoint = new Point3D(focusPointTranslation.getX(), focusPointTranslation.getY(), focusPointTranslation.getZ());
+      changeCameraPosition(new Point3D(x, y, z));
+   }
 
-      double distanceFromFocusPoint = desiredCameraPosition.distance(desiredFocusPoint);
+   public void changeCameraPosition(Point3DReadOnly desiredCameraPosition)
+   {
+      Point3D currentFocusPosition = new Point3D();
+      currentFocusPosition.set(nodeTrackingTranslate.getX(), nodeTrackingTranslate.getY(), nodeTrackingTranslate.getZ());
+      currentFocusPosition.add(focusPointTranslation.getX(), focusPointTranslation.getY(), focusPointTranslation.getZ());
+
+      double distanceFromFocusPoint = desiredCameraPosition.distance(currentFocusPosition);
       offsetFromFocusPoint.setZ(-distanceFromFocusPoint);
-      rotationCalculator.setRotationFromCameraAndFocusPositions(desiredCameraPosition, desiredFocusPoint, 0.0);
+      rotationCalculator.setRotationFromCameraAndFocusPositions(desiredCameraPosition, currentFocusPosition, 0.0);
+   }
+
+   public void changeFocusPosition(double x, double y, double z, boolean preserveCameraRotation)
+   {
+      changeFocusPosition(new Point3D(x, y, z), preserveCameraRotation);
+   }
+
+   public void changeFocusPosition(Point3DReadOnly desiredFocusPosition, boolean preserveCameraRotation)
+   {
+      nodeTracker.setNodeToTrack(null);
+
+      focusPointTranslation.setX(desiredFocusPosition.getX());
+      focusPointTranslation.setY(desiredFocusPosition.getY());
+      focusPointTranslation.setZ(desiredFocusPosition.getZ());
+
+      if (!preserveCameraRotation)
+      {
+         Transform cameraTransform = camera.getLocalToSceneTransform();
+         Point3D currentCameraPosition = new Point3D(cameraTransform.getTx(), cameraTransform.getTy(), cameraTransform.getTz());
+         double distanceFromFocusPoint = currentCameraPosition.distance(desiredFocusPosition);
+         offsetFromFocusPoint.setZ(-distanceFromFocusPoint);
+         rotationCalculator.setRotationFromCameraAndFocusPositions(currentCameraPosition, desiredFocusPosition, 0.0);
+      }
+   }
+
+   public void rotateCameraOnItself(double deltaLatitude, double deltaLongitude, double deltaRoll)
+   {
+      Transform cameraTransform = camera.getLocalToSceneTransform();
+      Point3D currentCameraPosition = new Point3D(cameraTransform.getTx(), cameraTransform.getTy(), cameraTransform.getTz());
+
+      rotationCalculator.updateRotation(deltaLatitude, deltaLongitude, deltaRoll);
+
+      Point3D newFocusPointTranslation = new Point3D();
+      newFocusPointTranslation.setX(-cameraOrientation.getMxz() * offsetFromFocusPoint.getZ());
+      newFocusPointTranslation.setY(-cameraOrientation.getMyz() * offsetFromFocusPoint.getZ());
+      newFocusPointTranslation.setZ(-cameraOrientation.getMzz() * offsetFromFocusPoint.getZ());
+      newFocusPointTranslation.sub(nodeTrackingTranslate.getX(), nodeTrackingTranslate.getY(), nodeTrackingTranslate.getZ());
+      newFocusPointTranslation.add(currentCameraPosition);
+      focusPointTranslation.setX(newFocusPointTranslation.getX());
+      focusPointTranslation.setY(newFocusPointTranslation.getY());
+      focusPointTranslation.setZ(newFocusPointTranslation.getZ());
    }
 
    @Override
@@ -145,10 +202,19 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
 
       if (event instanceof MouseEvent)
       {
-         if (rayBasedFocusTranslation != null)
-            rayBasedFocusTranslation.handle((MouseEvent) event);
+         MouseEvent mouseEvent = (MouseEvent) event;
 
-         rotationEventHandler.handle((MouseEvent) event);
+         if (rayBasedFocusTranslation != null)
+            rayBasedFocusTranslation.handle(mouseEvent);
+
+         if (!event.isConsumed())
+            orbitalRotationEventHandler.handle(mouseEvent);
+
+         if (!event.isConsumed())
+         {
+            if (cameraRotationEventHandler != null)
+               cameraRotationEventHandler.handle(mouseEvent);
+         }
       }
    }
 
@@ -209,9 +275,67 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
                   focusPointTranslation.setY(scenePoint.getY());
                   focusPointTranslation.setZ(scenePoint.getZ());
                }
+
+               event.consume();
             }
          }
       };
+   }
+
+   private EventHandler<MouseEvent> cameraRotationEventHandler;
+
+   public void setupCameraRotationHandler()
+   {
+      setupCameraRotationHandler(MouseButton.SECONDARY);
+   }
+
+   public void setupCameraRotationHandler(MouseButton mouseButton)
+   {
+      setupCameraRotationHandler(mouseButton, () -> 0.003);
+   }
+
+   public void setupCameraRotationHandler(MouseButton mouseButton, DoubleSupplier modifier)
+   {
+      cameraRotationEventHandler = new EventHandler<MouseEvent>()
+      {
+         private final Point2D oldMouseLocation = new Point2D();
+
+         @Override
+         public void handle(MouseEvent event)
+         {
+            if (event.getButton() != mouseButton)
+               return;
+
+            // Filters single clicks
+            if (event.isStillSincePress())
+               return;
+
+            if (event.getEventType() == MouseEvent.MOUSE_PRESSED)
+            {
+               oldMouseLocation.set(event.getSceneX(), event.getSceneY());
+               return;
+            }
+
+            if (event.getEventType() != MouseEvent.MOUSE_DRAGGED)
+               return;
+
+            // Acquire the new mouse coordinates from the recent event
+            Point2D newMouseLocation = new Point2D(event.getSceneX(), event.getSceneY());
+
+            Vector2D drag = new Vector2D();
+            drag.sub(newMouseLocation, oldMouseLocation);
+            drag.scale(modifier.getAsDouble());
+            rotateCameraOnItself(drag.getY(), -drag.getX(), 0.0);
+            oldMouseLocation.set(newMouseLocation);
+         }
+      };
+   }
+
+   public void dispose()
+   {
+      cameraRotationEventHandler = null;
+      translationCalculator.dispose();
+      focusPointResizeAnimation.stop();
    }
 
    public Sphere getFocusPointViz()
