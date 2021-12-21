@@ -1,11 +1,3 @@
-import org.apache.commons.lang3.SystemUtils
-
-buildscript {
-   dependencies {
-      classpath("org.apache.commons:commons-lang3:3.12.0")
-   }
-}
-
 plugins {
    id("us.ihmc.ihmc-build")
    id("us.ihmc.ihmc-ci") version "7.5"
@@ -24,7 +16,6 @@ ihmc {
 
 mainDependencies {
    api("net.sf.trove4j:trove4j:3.0.3")
-   api("org.apache.commons:commons-lang3:3.12.0")
 
    api("org.fxyz3d:fxyz3d:0.1.1") {
       exclude(group = "java3d", module = "vecmath")
