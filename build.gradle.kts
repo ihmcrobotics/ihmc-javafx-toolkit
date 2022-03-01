@@ -27,7 +27,7 @@ mainDependencies {
    api("us.ihmc:ihmc-graphics-description:0.19.6")
    api("us.ihmc:jassimp:4.0.0-ihmc6")
 
-   var javaFXVersion = "11.0.2"
+   var javaFXVersion = "17.0.2"
    api(ihmc.javaFXModule("base", javaFXVersion))
    api(ihmc.javaFXModule("controls", javaFXVersion))
    api(ihmc.javaFXModule("graphics", javaFXVersion))
