@@ -194,6 +194,7 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
    public void changeFocusPosition(Point3DReadOnly desiredFocusPosition, boolean translateCamera)
    {
       nodeTracker.setNodeToTrack(null);
+      nodeTracker.resetTranslate();
 
       if (translateCamera)
       {
