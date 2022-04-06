@@ -151,23 +151,66 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
       rotationCalculator.setRotationFromCameraAndFocusPositions(desiredCameraPosition, currentFocusPosition, 0.0);
    }
 
-   public void changeFocusPosition(double x, double y, double z, boolean preserveCameraRotation)
+   /**
+    * Sets the coordinates of the focus point the camera is looking at.
+    * <p>
+    * This can be done in 2 different ways controlled by the argument {@code translateCamera}:
+    * <ul>
+    * <li>translating the camera: the offset between the focus point and the camera is preserved as
+    * well as the camera orientation. This will be used when {@code translateCamera = true}.
+    * <li>rotating the camera: the distance between the focus point and the camera changes, the camera
+    * will pitch and/or yaw as a result of this operation. This will be used when
+    * {@code translateCamera = false}.
+    * </ul>
+    * </p>
+    * 
+    * @param x               the x-coordinate of the new focus location.
+    * @param y               the y-coordinate of the new focus location.
+    * @param z               the z-coordinate of the new focus location.
+    * @param translateCamera whether to translate or rotate the camera when updating the focus point.
+    */
+   public void changeFocusPosition(double x, double y, double z, boolean translateCamera)
    {
-      changeFocusPosition(new Point3D(x, y, z), preserveCameraRotation);
+      changeFocusPosition(new Point3D(x, y, z), translateCamera);
    }
 
-   public void changeFocusPosition(Point3DReadOnly desiredFocusPosition, boolean preserveCameraRotation)
+   /**
+    * Sets the coordinates of the focus point the camera is looking at.
+    * <p>
+    * This can be done in 2 different ways controlled by the argument {@code translateCamera}:
+    * <ul>
+    * <li>translating the camera: the offset between the focus point and the camera is preserved as
+    * well as the camera orientation. This will be used when {@code translateCamera = true}.
+    * <li>rotating the camera: the distance between the focus point and the camera changes, the camera
+    * will pitch and/or yaw as a result of this operation. This will be used when
+    * {@code translateCamera = false}.
+    * </ul>
+    * </p>
+    * 
+    * @param desiredFocusPosition the new focus location.
+    * @param translateCamera      whether to translate or rotate the camera when updating the focus
+    *                             point.
+    */
+   public void changeFocusPosition(Point3DReadOnly desiredFocusPosition, boolean translateCamera)
    {
       nodeTracker.setNodeToTrack(null);
 
-      focusPointTranslation.setX(desiredFocusPosition.getX());
-      focusPointTranslation.setY(desiredFocusPosition.getY());
-      focusPointTranslation.setZ(desiredFocusPosition.getZ());
-
-      if (!preserveCameraRotation)
+      if (translateCamera)
       {
+         focusPointTranslation.setX(desiredFocusPosition.getX());
+         focusPointTranslation.setY(desiredFocusPosition.getY());
+         focusPointTranslation.setZ(desiredFocusPosition.getZ());
+      }
+      else
+      {
+         // The focus position is used to compute the camera transform, so first want to get the camera position.
          Transform cameraTransform = camera.getLocalToSceneTransform();
          Point3D currentCameraPosition = new Point3D(cameraTransform.getTx(), cameraTransform.getTy(), cameraTransform.getTz());
+
+         focusPointTranslation.setX(desiredFocusPosition.getX());
+         focusPointTranslation.setY(desiredFocusPosition.getY());
+         focusPointTranslation.setZ(desiredFocusPosition.getZ());
+
          double distanceFromFocusPoint = currentCameraPosition.distance(desiredFocusPosition);
          offsetFromFocusPoint.setZ(-distanceFromFocusPoint);
          rotationCalculator.setRotationFromCameraAndFocusPositions(currentCameraPosition, desiredFocusPosition, 0.0);
