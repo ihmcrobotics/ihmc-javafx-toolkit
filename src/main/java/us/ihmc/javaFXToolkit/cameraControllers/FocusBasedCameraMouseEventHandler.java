@@ -39,7 +39,6 @@ import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
-import us.ihmc.log.LogTools;
 
 /**
  * This class provides a simple controller for a JavaFX {@link PerspectiveCamera}. The control is
@@ -320,12 +319,6 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
                   return;
                javafx.geometry.Point3D localPoint = pickResult.getIntersectedPoint();
                javafx.geometry.Point3D scenePoint = intersectedNode.getLocalToSceneTransform().transform(localPoint);
-
-               LogTools.info("Result: node={}, point={}, parent={}",
-                             pickResult.getIntersectedNode(),
-                             pickResult.getIntersectedNode().getLocalToSceneTransform().transform(pickResult.getIntersectedPoint()),
-                             pickResult.getIntersectedNode().getParent());
-
                nodeTracker.setNodeToTrack(null);
                nodeTracker.resetTranslate();
 
