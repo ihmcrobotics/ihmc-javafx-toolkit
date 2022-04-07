@@ -1,6 +1,7 @@
 package us.ihmc.javaFXToolkit.cameraControllers;
 
 import java.util.function.DoubleSupplier;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import javafx.animation.AnimationTimer;
@@ -38,6 +39,7 @@ import us.ihmc.euclid.tuple3D.Point3D;
 import us.ihmc.euclid.tuple3D.Vector3D;
 import us.ihmc.euclid.tuple3D.interfaces.Point3DReadOnly;
 import us.ihmc.euclid.tuple3D.interfaces.Vector3DReadOnly;
+import us.ihmc.log.LogTools;
 
 /**
  * This class provides a simple controller for a JavaFX {@link PerspectiveCamera}. The control is
@@ -266,6 +268,11 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
 
    public void enableShiftClickFocusTranslation()
    {
+      enableShiftClickFocusTranslation(MouseEvent::getPickResult);
+   }
+
+   public void enableShiftClickFocusTranslation(Function<MouseEvent, PickResult> nodePickingFunction)
+   {
       setupRayBasedFocusTranslation(event ->
       {
          if (!event.isShiftDown())
@@ -278,15 +285,25 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
             return false;
 
          return true;
-      });
+      }, nodePickingFunction);
    }
 
    public void setupRayBasedFocusTranslation(Predicate<MouseEvent> condition)
    {
-      setupRayBasedFocusTranslation(condition, 0.1);
+      setupRayBasedFocusTranslation(condition, MouseEvent::getPickResult);
+   }
+
+   public void setupRayBasedFocusTranslation(Predicate<MouseEvent> condition, Function<MouseEvent, PickResult> nodePickingFunction)
+   {
+      setupRayBasedFocusTranslation(condition, nodePickingFunction, 0.1);
    }
 
    public void setupRayBasedFocusTranslation(Predicate<MouseEvent> condition, double animationDuration)
+   {
+      setupRayBasedFocusTranslation(condition, MouseEvent::getPickResult, animationDuration);
+   }
+
+   public void setupRayBasedFocusTranslation(Predicate<MouseEvent> condition, Function<MouseEvent, PickResult> nodePickingFunction, double animationDuration)
    {
       rayBasedFocusTranslation = new EventHandler<MouseEvent>()
       {
@@ -295,12 +312,19 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
          {
             if (condition.test(event))
             {
-               PickResult pickResult = event.getPickResult();
+               PickResult pickResult = nodePickingFunction.apply(event);
+               if (pickResult == null)
+                  return;
                Node intersectedNode = pickResult.getIntersectedNode();
                if (intersectedNode == null || intersectedNode instanceof SubScene)
                   return;
                javafx.geometry.Point3D localPoint = pickResult.getIntersectedPoint();
                javafx.geometry.Point3D scenePoint = intersectedNode.getLocalToSceneTransform().transform(localPoint);
+
+               LogTools.info("Result: node={}, point={}, parent={}",
+                             pickResult.getIntersectedNode(),
+                             pickResult.getIntersectedNode().getLocalToSceneTransform().transform(pickResult.getIntersectedPoint()),
+                             pickResult.getIntersectedNode().getParent());
 
                nodeTracker.setNodeToTrack(null);
                nodeTracker.resetTranslate();
