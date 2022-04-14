@@ -1,6 +1,7 @@
 package us.ihmc.javaFXToolkit.cameraControllers;
 
 import java.util.function.DoubleSupplier;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import javafx.animation.AnimationTimer;
@@ -151,23 +152,67 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
       rotationCalculator.setRotationFromCameraAndFocusPositions(desiredCameraPosition, currentFocusPosition, 0.0);
    }
 
-   public void changeFocusPosition(double x, double y, double z, boolean preserveCameraRotation)
+   /**
+    * Sets the coordinates of the focus point the camera is looking at.
+    * <p>
+    * This can be done in 2 different ways controlled by the argument {@code translateCamera}:
+    * <ul>
+    * <li>translating the camera: the offset between the focus point and the camera is preserved as
+    * well as the camera orientation. This will be used when {@code translateCamera = true}.
+    * <li>rotating the camera: the distance between the focus point and the camera changes, the camera
+    * will pitch and/or yaw as a result of this operation. This will be used when
+    * {@code translateCamera = false}.
+    * </ul>
+    * </p>
+    * 
+    * @param x               the x-coordinate of the new focus location.
+    * @param y               the y-coordinate of the new focus location.
+    * @param z               the z-coordinate of the new focus location.
+    * @param translateCamera whether to translate or rotate the camera when updating the focus point.
+    */
+   public void changeFocusPosition(double x, double y, double z, boolean translateCamera)
    {
-      changeFocusPosition(new Point3D(x, y, z), preserveCameraRotation);
+      changeFocusPosition(new Point3D(x, y, z), translateCamera);
    }
 
-   public void changeFocusPosition(Point3DReadOnly desiredFocusPosition, boolean preserveCameraRotation)
+   /**
+    * Sets the coordinates of the focus point the camera is looking at.
+    * <p>
+    * This can be done in 2 different ways controlled by the argument {@code translateCamera}:
+    * <ul>
+    * <li>translating the camera: the offset between the focus point and the camera is preserved as
+    * well as the camera orientation. This will be used when {@code translateCamera = true}.
+    * <li>rotating the camera: the distance between the focus point and the camera changes, the camera
+    * will pitch and/or yaw as a result of this operation. This will be used when
+    * {@code translateCamera = false}.
+    * </ul>
+    * </p>
+    * 
+    * @param desiredFocusPosition the new focus location.
+    * @param translateCamera      whether to translate or rotate the camera when updating the focus
+    *                             point.
+    */
+   public void changeFocusPosition(Point3DReadOnly desiredFocusPosition, boolean translateCamera)
    {
       nodeTracker.setNodeToTrack(null);
+      nodeTracker.resetTranslate();
 
-      focusPointTranslation.setX(desiredFocusPosition.getX());
-      focusPointTranslation.setY(desiredFocusPosition.getY());
-      focusPointTranslation.setZ(desiredFocusPosition.getZ());
-
-      if (!preserveCameraRotation)
+      if (translateCamera)
       {
+         focusPointTranslation.setX(desiredFocusPosition.getX());
+         focusPointTranslation.setY(desiredFocusPosition.getY());
+         focusPointTranslation.setZ(desiredFocusPosition.getZ());
+      }
+      else
+      {
+         // The focus position is used to compute the camera transform, so first want to get the camera position.
          Transform cameraTransform = camera.getLocalToSceneTransform();
          Point3D currentCameraPosition = new Point3D(cameraTransform.getTx(), cameraTransform.getTy(), cameraTransform.getTz());
+
+         focusPointTranslation.setX(desiredFocusPosition.getX());
+         focusPointTranslation.setY(desiredFocusPosition.getY());
+         focusPointTranslation.setZ(desiredFocusPosition.getZ());
+
          double distanceFromFocusPoint = currentCameraPosition.distance(desiredFocusPosition);
          offsetFromFocusPoint.setZ(-distanceFromFocusPoint);
          rotationCalculator.setRotationFromCameraAndFocusPositions(currentCameraPosition, desiredFocusPosition, 0.0);
@@ -222,6 +267,11 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
 
    public void enableShiftClickFocusTranslation()
    {
+      enableShiftClickFocusTranslation(MouseEvent::getPickResult);
+   }
+
+   public void enableShiftClickFocusTranslation(Function<MouseEvent, PickResult> nodePickingFunction)
+   {
       setupRayBasedFocusTranslation(event ->
       {
          if (!event.isShiftDown())
@@ -234,15 +284,25 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
             return false;
 
          return true;
-      });
+      }, nodePickingFunction);
    }
 
    public void setupRayBasedFocusTranslation(Predicate<MouseEvent> condition)
    {
-      setupRayBasedFocusTranslation(condition, 0.1);
+      setupRayBasedFocusTranslation(condition, MouseEvent::getPickResult);
+   }
+
+   public void setupRayBasedFocusTranslation(Predicate<MouseEvent> condition, Function<MouseEvent, PickResult> nodePickingFunction)
+   {
+      setupRayBasedFocusTranslation(condition, nodePickingFunction, 0.1);
    }
 
    public void setupRayBasedFocusTranslation(Predicate<MouseEvent> condition, double animationDuration)
+   {
+      setupRayBasedFocusTranslation(condition, MouseEvent::getPickResult, animationDuration);
+   }
+
+   public void setupRayBasedFocusTranslation(Predicate<MouseEvent> condition, Function<MouseEvent, PickResult> nodePickingFunction, double animationDuration)
    {
       rayBasedFocusTranslation = new EventHandler<MouseEvent>()
       {
@@ -251,13 +311,14 @@ public class FocusBasedCameraMouseEventHandler implements EventHandler<Event>
          {
             if (condition.test(event))
             {
-               PickResult pickResult = event.getPickResult();
+               PickResult pickResult = nodePickingFunction.apply(event);
+               if (pickResult == null)
+                  return;
                Node intersectedNode = pickResult.getIntersectedNode();
                if (intersectedNode == null || intersectedNode instanceof SubScene)
                   return;
                javafx.geometry.Point3D localPoint = pickResult.getIntersectedPoint();
                javafx.geometry.Point3D scenePoint = intersectedNode.getLocalToSceneTransform().transform(localPoint);
-
                nodeTracker.setNodeToTrack(null);
                nodeTracker.resetTranslate();
 
