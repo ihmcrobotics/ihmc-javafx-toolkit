@@ -23,7 +23,7 @@ mainDependencies {
    }
 
    api("us.ihmc:euclid:0.19.1")
-   api("us.ihmc:ihmc-graphics-description:0.20.1")
+   api("us.ihmc:ihmc-graphics-description:0.20.2")
    api("us.ihmc:jassimp:4.0.0-ihmc6")
 
    var javaFXVersion = "17.0.2"
