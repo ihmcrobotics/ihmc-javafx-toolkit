@@ -6,7 +6,7 @@ plugins {
 
 ihmc {
    group = "us.ihmc"
-   version = "17-0.22.2"
+   version = "17-0.22.3"
    vcsUrl = "https://github.com/ihmcrobotics/ihmc-javafx-toolkit"
    openSource = true
    
@@ -23,7 +23,7 @@ mainDependencies {
    }
 
    api("us.ihmc:euclid:0.20.0")
-   api("us.ihmc:ihmc-graphics-description:0.20.2")
+   api("us.ihmc:ihmc-graphics-description:0.20.3")
    api("us.ihmc:jassimp:4.0.0-ihmc6")
 
    var javaFXVersion = "17.0.2"
