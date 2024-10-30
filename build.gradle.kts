@@ -22,8 +22,8 @@ mainDependencies {
       exclude(group = "org.slf4j", module = "slf4j-simple")
    }
 
-   api("us.ihmc:euclid:0.21.0")
-   api("us.ihmc:ihmc-graphics-description:0.25.1")
+   api("us.ihmc:euclid:0.22.2")
+   api("us.ihmc:ihmc-graphics-description:0.25.2")
    api("us.ihmc:jassimp:4.0.0-ihmc6")
 
    var javaFXVersion = "17.0.2"
