@@ -20,7 +20,7 @@ mainDependencies {
       exclude(group = "org.slf4j", module = "slf4j-simple")
    }
 
-   api("us.ihmc:euclid:0.22.3")
+   api("us.ihmc:euclid:0.22.5")
    api("us.ihmc:ihmc-graphics-description:0.26.2")
    api("us.ihmc:jassimp:4.0.0-ihmc6")
 
